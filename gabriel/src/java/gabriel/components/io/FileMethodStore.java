@@ -18,14 +18,14 @@
 
 package gabriel.components.io;
 
-import gabriel.Permission;
 import gabriel.components.MethodStore;
+import gabriel.components.parser.MethodParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.*;
+import java.util.Map;
 
 /**
  * Reads method access mappings from files.
@@ -34,6 +34,13 @@ import java.util.*;
  * @version $id$
  */
 public class FileMethodStore implements MethodStore {
+
+  private MethodParser parser;
+
+  public FileMethodStore(MethodParser parser) {
+    this.parser = parser;
+  }
+
   /**
    * Get the method map with the permissions
    * to methods mappings.
@@ -73,59 +80,6 @@ public class FileMethodStore implements MethodStore {
     }
     String input = buffer.toString();
 
-    return parse(input);
-  }
-
-  /**
-   * Parse a method map from a string.
-   * <p/>
-   * <code>
-   * Permission { Method Method }
-   * Permission { Method }
-   * </code>
-   * <p/>
-   * Returns Method -> { Permission, Permission }.
-   *
-   * @param input String with method mapping
-   * @return Method map
-   */
-  private Map parse(String input) {
-    Permission permission = null;
-    String method = null;
-
-    int METHODS = 1;
-    int PERMISSIONS = 2;
-    int state = PERMISSIONS;
-
-    Map methodMap = new HashMap();
-
-    for (StringTokenizer stringTokenizer = new StringTokenizer(input, " \n{}", true);
-         stringTokenizer.hasMoreTokens();) {
-
-      String t = stringTokenizer.nextToken();
-
-      if (" ".equals(t) || "\n".equals(t)) {
-        // do nothing
-      } else if ("{".equals(t)) {
-        state = METHODS;
-      } else if ("}".equals(t)) {
-        state = PERMISSIONS;
-      } else if (state == PERMISSIONS) {
-        permission = new Permission(t);
-      } else if (state == METHODS) {
-        if (null != permission) {
-          method = t;
-          Set permissions;
-          if (methodMap.containsKey(method)) {
-            permissions = (Set) methodMap.get(method);
-          } else {
-            permissions = new HashSet();
-            methodMap.put(method, permissions);
-          }
-          permissions.add(permission);
-        }
-      }
-    }
-    return methodMap;
+    return parser.parse(input);
   }
 }

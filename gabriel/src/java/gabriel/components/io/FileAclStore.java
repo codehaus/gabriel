@@ -18,20 +18,15 @@
 
 package gabriel.components.io;
 
-import gabriel.Permission;
 import gabriel.Principal;
 import gabriel.acl.Acl;
-import gabriel.acl.AclEntry;
 import gabriel.components.AclStore;
+import gabriel.components.parser.AclParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.StringTokenizer;
 
 /**
  * Stores Acl in files with <name>.acl
@@ -40,6 +35,12 @@ import java.util.StringTokenizer;
  * @version $id$
  */
 public class FileAclStore implements AclStore {
+
+  private AclParser parser;
+
+  public FileAclStore(AclParser parser) {
+    this.parser = parser;
+  }
 
   // throws AclNotFoundException
   public Acl getAcl(Principal owner, String name) {
@@ -79,60 +80,6 @@ public class FileAclStore implements AclStore {
     }
     String input = buffer.toString();
 
-    return parse(owner, name, input);
-  }
-
-  private Acl parse(Principal owner, String name, String input) {
-    boolean negative = false;
-
-    Principal principal = null;
-    List permissions = new ArrayList();
-
-    Acl acl = new Acl(owner, name);
-
-    int PERMISSIONS = 1;
-    int PRINCIPAL = 2;
-
-    int state = PRINCIPAL;
-
-    for (StringTokenizer stringTokenizer = new StringTokenizer(input, " \n{}", true);
-         stringTokenizer.hasMoreTokens();) {
-
-      String t = stringTokenizer.nextToken();
-
-      if (" ".equals(t) || "\n".equals(t)) {
-        // do nothing
-      } else if ("{".equals(t)) {
-        state = PERMISSIONS;
-         } else if ("}".equals(t)) {
-        state = PRINCIPAL;
-
-        AclEntry entry = new AclEntry(principal);
-        Iterator iterator = permissions.iterator();
-        while (iterator.hasNext()) {
-          Permission permission = (Permission) iterator.next();
-          entry.addPermission(permission);
-        }
-        if (negative) {
-          entry.setNegativePermissions();
-          negative = false;
-        }
-        acl.addEntry(owner, entry);
-        permissions = new ArrayList();
-        principal = null;
-      } else if (state == PRINCIPAL) {
-        if (t.startsWith("-")) {
-          negative = true;
-          t = t.substring(1);
-        }
-        // handle "- principal" and "-principal"
-        if (!"".equals(t)) {
-          principal = new Principal(t);
-        }
-      } else if (state == PERMISSIONS) {
-        permissions.add(new Permission(t));
-      }
-    }
-    return acl;
+    return parser.parse(owner, name, input);
   }
 }
