@@ -20,6 +20,7 @@ package gabriel.test.components.parser;
 
 import gabriel.Permission;
 import gabriel.components.parser.MethodParser;
+import gabriel.components.parser.MethodParserImpl;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.core.MockObjectSupportTestCase;
@@ -38,7 +39,7 @@ public class MethodParserTest extends MockObjectSupportTestCase {
   }
 
   public void testParsePermissionsAndMethods() {
-    MethodParser parser = new MethodParser();
+    MethodParser parser = new MethodParserImpl();
 
     String source = "PM1 { M1 M2 \n" +
         "                  M3 }" +
@@ -53,7 +54,7 @@ public class MethodParserTest extends MockObjectSupportTestCase {
   }
 
   public void testHandleEmptyMethodBlocks() {
-    MethodParser parser = new MethodParser();
+    MethodParser parser = new MethodParserImpl();
 
     String source = "PM1 { } PM2 { M2 }";
 

@@ -18,11 +18,19 @@
 
 package gabriel.test.components.io;
 
+import gabriel.Permission;
+import gabriel.components.io.FileMethodStore;
 import gabriel.components.parser.MethodParser;
+import gabriel.components.parser.MethodParserImpl;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
+
+import java.io.StringReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 public class FileMethodStoreTest extends MockObjectTestCase {
 
@@ -37,8 +45,17 @@ public class FileMethodStoreTest extends MockObjectTestCase {
     mockMethodParser = mock(MethodParser.class);
   }
 
-//  public void testParse() {
-//    FileMethodStore store = new FileMethodStore((MethodParser) mockMethodParser.proxy());
-//    store.parse(new StringReader("PM1 { Class.M1 }"));
-//  }
+  public void testParse() {
+    Map methodMap = new HashMap();
+    mockMethodParser.expects(once()).method("parse").with(eq("PM1 {\n Class.M1\n }\n")).will(returnValue(methodMap));
+    FileMethodStore store = new FileMethodStore((MethodParser) mockMethodParser.proxy());
+    assertEquals("Returns correct method map", methodMap, store.parse(new StringReader("PM1 {\n Class.M1\n }")));
+  }
+
+  public void testGetMap() {
+    FileMethodStore store = new FileMethodStore(new MethodParserImpl());
+    Map methodMap = store.getMap("test_methods");
+
+    assertTrue("Method map contains PM1 to Class1.method1 mapping", ((Set) methodMap.get("Class1.method1")).contains(new Permission("PM1")));
+  }
 }

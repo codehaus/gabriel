@@ -26,6 +26,7 @@ public class AllIoTests extends TestCase {
   public static Test suite() {
     TestSuite s = new TestSuite();
     s.addTest(FileMethodStoreTest.suite());
+    s.addTest(FileAclStoreTest.suite());
     return s;
   }
 }
