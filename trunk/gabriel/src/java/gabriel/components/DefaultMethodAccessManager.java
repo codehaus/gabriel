@@ -18,10 +18,10 @@
 
 package gabriel.components;
 
-import gabriel.components.parser.AclParser;
-import gabriel.components.parser.MethodParser;
 import gabriel.components.io.FileAclStore;
 import gabriel.components.io.FileMethodStore;
+import gabriel.components.parser.AclParserImpl;
+import gabriel.components.parser.MethodParserImpl;
 
 /**
  * Default configuration for a MethodAccessManager
@@ -32,8 +32,8 @@ import gabriel.components.io.FileMethodStore;
  */
 public class DefaultMethodAccessManager extends MethodAccessManagerImpl {
   public DefaultMethodAccessManager() {
-    super(new AccessManagerImpl(new FileAclStore(new AclParser())),
-        new FileMethodStore(new MethodParser()));
+    super(new AccessManagerImpl(new FileAclStore(new AclParserImpl())),
+        new FileMethodStore(new MethodParserImpl()));
     super.start();
   }
 }

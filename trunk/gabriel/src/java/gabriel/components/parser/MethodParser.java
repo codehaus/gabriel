@@ -18,9 +18,7 @@
 
 package gabriel.components.parser;
 
-import gabriel.Permission;
-
-import java.util.*;
+import java.util.Map;
 
 /**
  * Parse a method to permission mapping
@@ -28,7 +26,7 @@ import java.util.*;
  * @author stephan
  * @version $id$
  */
-public class MethodParser {
+public interface MethodParser {
   /**
    * Parse a method map from a string.
    * <p/>
@@ -42,43 +40,5 @@ public class MethodParser {
    * @param input String with method mapping
    * @return Method map
    */
-  public Map parse(String input) {
-    Permission permission = null;
-    String method = null;
-
-    int METHODS = 1;
-    int PERMISSIONS = 2;
-    int state = PERMISSIONS;
-
-    Map methodMap = new HashMap();
-
-    for (StringTokenizer stringTokenizer = new StringTokenizer(input, " \n{}", true);
-         stringTokenizer.hasMoreTokens();) {
-
-      String t = stringTokenizer.nextToken();
-
-      if (" ".equals(t) || "\n".equals(t)) {
-        // do nothing
-      } else if ("{".equals(t)) {
-        state = METHODS;
-      } else if ("}".equals(t)) {
-        state = PERMISSIONS;
-      } else if (state == PERMISSIONS) {
-        permission = new Permission(t);
-      } else if (state == METHODS) {
-        if (null != permission) {
-          method = t;
-          Set permissions;
-          if (methodMap.containsKey(method)) {
-            permissions = (Set) methodMap.get(method);
-          } else {
-            permissions = new HashSet();
-            methodMap.put(method, permissions);
-          }
-          permissions.add(permission);
-        }
-      }
-    }
-    return methodMap;
-  }
+  public Map parse(String input);
 }
