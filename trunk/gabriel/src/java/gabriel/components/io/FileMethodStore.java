@@ -90,11 +90,12 @@ public class FileMethodStore implements MethodStore {
    * @return Method map
    */
   private Map parse(String input) {
-    boolean permissionIsNext = true;
-    boolean methodsAreNext = false;
-
     Permission permission = null;
     String method = null;
+
+    int METHODS = 1;
+    int PERMISSIONS = 2;
+    int state = PERMISSIONS;
 
     Map methodMap = new HashMap();
 
@@ -106,14 +107,12 @@ public class FileMethodStore implements MethodStore {
       if (" ".equals(t) || "\n".equals(t)) {
         // do nothing
       } else if ("{".equals(t)) {
-        methodsAreNext = true;
-        permissionIsNext = false;
+        state = METHODS;
       } else if ("}".equals(t)) {
-        methodsAreNext = false;
-        permissionIsNext = true;
-      } else if (permissionIsNext) {
+        state = PERMISSIONS;
+      } else if (state == PERMISSIONS) {
         permission = new Permission(t);
-      } else if (methodsAreNext) {
+      } else if (state == METHODS) {
         if (null != permission) {
           method = t;
           Set permissions;
