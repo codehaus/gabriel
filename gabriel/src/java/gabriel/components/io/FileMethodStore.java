@@ -1,8 +1,8 @@
 /*
- *      Copyright 2001-2004 Fraunhofer Gesellschaft, Munich, Germany, for its
+ *      Copyright 2001-2004 Fraunhofer Gesellschaft, Munich, Germany, for its 
  *      Fraunhofer Institute Computer Architecture and Software Technology
  *      (FIRST), Berlin, Germany
- *
+ *      
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -16,18 +16,15 @@
  *  limitations under the License.
  */
 
-package gabriel.test.dynaop;
+package gabriel.components.io;
 
-import gabriel.Principal;
+import gabriel.components.MethodStore;
 
-public class SecureMixin implements Ownable {
-  private Principal owner;
-
-  public void setOwner(Principal owner) {
-    this.owner = owner;
-  }
-
-  public Principal getOwner() {
-    return owner;
-  }
+/**
+ * Reads method access mappings from files.
+ *
+ * @author stephan
+ * @version $id$
+ */
+public class FileMethodStore implements MethodStore {
 }

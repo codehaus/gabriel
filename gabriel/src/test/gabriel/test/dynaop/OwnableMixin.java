@@ -16,21 +16,23 @@
  *  limitations under the License.
  */
 
-package gabriel.test.components;
+package gabriel.test.dynaop;
 
-import gabriel.test.components.context.AllContextTests;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import gabriel.Principal;
+import gabriel.components.context.Ownable;
 
+public class OwnableMixin implements Ownable {
+  private Principal owner;
 
-public class AllComponentsTests extends TestCase {
-  public static Test suite() {
-    TestSuite s = new TestSuite();
-    s.addTest(AllContextTests.suite());
-    s.addTest(AccessManagerTest.suite());
-    s.addTest(CallAccessManagerTest.suite());
-    s.addTest(AclManagerTest.suite());
-    return s;
+  public void setOwner(Principal owner) {
+    this.owner = owner;
+  }
+
+  public boolean isOwner(Principal owner) {
+    return owner.equals(owner);
+  }
+
+  public Principal getOwner() {
+    return owner;
   }
 }

@@ -16,21 +16,36 @@
  *  limitations under the License.
  */
 
-package gabriel.test.components;
+package gabriel.components.context;
 
-import gabriel.test.components.context.AllContextTests;
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
+import gabriel.Principal;
 
+/**
+ * Addes ownership to an object.
+ *
+ * @author stephan
+ * @version $id$
+ */
+public interface Ownable {
+  /**
+   * Set new owner.
+   *
+   * @param owner Principal who is new owner
+   */
+  public void setOwner(Principal owner);
 
-public class AllComponentsTests extends TestCase {
-  public static Test suite() {
-    TestSuite s = new TestSuite();
-    s.addTest(AllContextTests.suite());
-    s.addTest(AccessManagerTest.suite());
-    s.addTest(CallAccessManagerTest.suite());
-    s.addTest(AclManagerTest.suite());
-    return s;
-  }
+  /**
+   * Return current owner.
+   *
+   * @return Principal who is current owner
+   */
+  public Principal getOwner();
+
+  /**
+   * Check if principal is owner.
+   *
+   * @param principal Principal to check
+   * @return true if principal is owner
+   */
+  public boolean isOwner(Principal principal);
 }

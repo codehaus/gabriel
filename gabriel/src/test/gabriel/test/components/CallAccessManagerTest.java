@@ -29,7 +29,9 @@ import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class CallAccessManagerTest extends MockObjectTestCase {
   private CallAccessManager callManager;
@@ -49,13 +51,15 @@ public class CallAccessManagerTest extends MockObjectTestCase {
   public void testCheckPermission() {
     Permission permission = new Permission("TestPermission");
     Principal principal = new Principal("TestPrincipal");
-    mockAccessManager.expects(once()).method("checkPermission").with(same(principal), same(permission)).will(returnValue(true));
-    callManager.addMethods(permission, new String[] {"TestClass.method1"});
-    assertTrue("Granted permission to call TestClass.method1.", callManager.checkPermission(principal, "TestClass.method1"));
+    Set principals = new HashSet();
+    principals.add(principal);
+    mockAccessManager.expects(once()).method("checkPermission").with(same(principals), same(permission)).will(returnValue(true));
+    callManager.addMethods(permission, new String[]{"TestClass.method1"});
+    assertTrue("Granted permission to call TestClass.method1.", callManager.checkPermission(principals, "TestClass.method1"));
   }
 
   public void testAddPermissionsWithList() {
-  List permissions = Arrays.asList(new String[] {"TestClass.method1", "TestClass.method2"});
+    List permissions = Arrays.asList(new String[]{"TestClass.method1", "TestClass.method2"});
     callManager.addMethods(new Permission("TestPermission"), permissions);
     assertTrue("TestPermission is needed for method1",
         callManager.getPermissions("TestClass.method1").contains(new Permission("TestPermission")));
@@ -64,7 +68,7 @@ public class CallAccessManagerTest extends MockObjectTestCase {
   }
 
   public void testAddPermissionsWithArray() {
-    String[] permissions = new String[] {"TestClass.method1", "TestClass.method2"};
+    String[] permissions = new String[]{"TestClass.method1", "TestClass.method2"};
     callManager.addMethods(new Permission("TestPermission"), permissions);
     assertTrue("TestPermission is needed for method1",
         callManager.getPermissions("TestClass.method1").contains(new Permission("TestPermission")));

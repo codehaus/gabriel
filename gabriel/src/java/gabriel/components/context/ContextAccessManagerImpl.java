@@ -19,37 +19,41 @@
 package gabriel.components.context;
 
 import gabriel.Permission;
-import gabriel.Principal;
 import gabriel.components.AccessManager;
+import gabriel.components.AccessManagerImpl;
+
+import java.util.Set;
 
 /**
  * ContextAccessManager checks for access rights with permissions
- * in a certain context
+ * in a certain context.
  *
  * @author Stephan J. Schmidt
- * @version $Id: ContextAccessManagerImpl.java,v 1.1 2004-06-18 11:29:41 stephan Exp $
+ * @version $Id: ContextAccessManagerImpl.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
  */
 
-public class ContextAccessManagerImpl implements ContextAccessManager {
-    private AccessManager accessManager;
+public class ContextAccessManagerImpl extends AccessManagerImpl implements ContextAccessManager {
+  private AccessManager accessManager;
 
-    public ContextAccessManagerImpl(AccessManager accessManager) {
-        this.accessManager = accessManager;
-    }
+  /**
+   * Default constructor.
+   */
+  public ContextAccessManagerImpl() {
+  }
 
-    /**
-     * Check if a principal posseses the permission
-     * Perhaps return int with -1,0,1 for denied,neutral,allow
-     * The context could contain ownership and resources
-     * so ContextAccessManager modifies the principals
-     *
-     * @param principal  Principal to check permission for
-     * @param permission Permission to check
-     * @param context    AccessContext to consider when checking for a permission
-     * @return true if principal has permission
-     */
-    public boolean checkPermission(Principal principal, Permission permission, AccessContext context) {
-        // context.modifyPrincipal();
-        return accessManager.checkPermission(principal, permission);
-    }
+  /**
+   * Check if a principal posseses the permission
+   * Perhaps return int with -1,0,1 for denied,neutral,allow
+   * The context could contain ownership and resources
+   * so ContextAccessManager modifies the principals.
+   *
+   * @param principals Set of principal to check permission for
+   * @param permission Permission to check
+   * @param context    AccessContext to consider when checking for a permission
+   * @return true if principal has permission
+   */
+  public boolean checkPermission(Set principals, Permission permission, AccessContext context) {
+    principals = context.modifyPrincipals(principals);
+    return checkPermission(principals, permission);
+  }
 }

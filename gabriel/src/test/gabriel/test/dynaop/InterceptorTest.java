@@ -18,15 +18,34 @@
 
 package gabriel.test.dynaop;
 
-import dynaop.*;
-
+import dynaop.Aspects;
+import dynaop.Pointcuts;
+import dynaop.ProxyFactory;
+import dynaop.util.Closure;
 import gabriel.Principal;
-
+import gabriel.Subject;
+import gabriel.components.CallAccessManager;
+import gabriel.components.context.ContextCallAccessManager;
+import gabriel.components.dynaop.AccessInterceptor;
+import gabriel.components.dynaop.OwnableAccessInterceptor;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
-public class InterceptorTest extends TestCase {
+import java.util.HashSet;
+import java.util.Set;
+
+public class InterceptorTest extends MockObjectTestCase {
+
+  private Mock contextCallAccessManager;
+  private Mock callAccessManager;
+
+  private Principal notAllowed;
+  private Set principals;
+
+  private Aspects aspects;
+  private ProxyFactory proxyFactory;
 
   public static Test suite() {
     return new TestSuite(InterceptorTest.class);
@@ -34,19 +53,43 @@ public class InterceptorTest extends TestCase {
 
   protected void setUp() throws Exception {
     super.setUp();
+    this.contextCallAccessManager = mock(ContextCallAccessManager.class);
+    this.callAccessManager = mock(CallAccessManager.class);
+
+    principals = new HashSet();
+    Subject subject = Subject.get();
+    subject.setPrincipals(principals);
+
+    notAllowed = new Principal("NotAllowedPrincipal");
+
+    aspects = new Aspects();
   }
 
+  public void testDenyOwnableAccessInterceptor() {
 
-  public void testInterceptor() {
-    Aspects aspects = new Aspects();
-    aspects.interceptor(Pointcuts.instancesOf(SecureObjectImpl.class),
-        Pointcuts.membersOf(SecureObject.class), new AccessInterceptor());
-    ProxyFactory proxyFactory = ProxyFactory.getInstance(aspects);
+    aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
+        Pointcuts.ALL_METHODS,
+        new OwnableAccessInterceptor((ContextCallAccessManager) contextCallAccessManager.proxy()));
+
+    aspects.mixin(Pointcuts.instancesOf(SecureObject.class),
+        OwnableMixin.class, new Closure() {
+          public void execute(Object o) {
+          }
+        });
+
+    proxyFactory = ProxyFactory.getInstance(aspects);
+
+    contextCallAccessManager.
+        expects(once()).
+        method("checkPermission").
+        with(eq(principals),
+            eq("gabriel.test.dynaop.SecureObject.setName"),
+            ANYTHING).
+        will(returnValue(false));
 
     SecureObject object = new SecureObjectImpl("TestName");
     SecureObject wrapped = (SecureObject) proxyFactory.wrap(object);
-    // An interceptor has been registered in the dynaop.bsh file for this method
-    Principal notAllowed = new Principal("NotAllowedPrincipal");
+
     try {
       wrapped.setName(notAllowed, "NewTestName");
       fail("Access should be denied to method setName() for NotAllowedPrincipal");
@@ -54,10 +97,29 @@ public class InterceptorTest extends TestCase {
       // System.out.println(e.getMessage());
     }
     assertEquals("Name not set by wrong principal.", "TestName", object.getName());
-
-    Principal allowed = new Principal("AllowedPrincipal");
-    wrapped.setName(allowed, "NewTestName");
-    assertEquals("Name set by allowed principal.", "NewTestName", object.getName());
   }
 
+  public void testDenyAccessInterceptor() {
+    callAccessManager.
+        expects(once()).
+        method("checkPermission").
+        with(eq(principals),
+            eq("gabriel.test.dynaop.SecureObject.setName")).
+        will(returnValue(false));
+
+    aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
+        Pointcuts.ALL_METHODS, new AccessInterceptor((CallAccessManager) callAccessManager.proxy()));
+
+    proxyFactory = ProxyFactory.getInstance(aspects);
+
+    SecureObject object = new SecureObjectImpl("TestName");
+    SecureObject wrapped = (SecureObject) proxyFactory.wrap(object);
+    try {
+      wrapped.setName(notAllowed, "NewTestName");
+      fail("Access should be denied to method setName() for NotAllowedPrincipal");
+    } catch (SecurityException e) {
+      // System.out.println(e.getMessage());
+    }
+    assertEquals("Name not set by wrong principal.", "TestName", object.getName());
+  }
 }

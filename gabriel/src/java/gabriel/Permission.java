@@ -22,12 +22,17 @@ package gabriel;
  * Permission grants access to the execution of actions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: Permission.java,v 1.1.1.1 2004-06-16 07:56:38 stephan Exp $
+ * @version $Id: Permission.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
  */
 
 public class Permission {
   private String name;
 
+  /**
+   * Default constructor.
+   *
+   * @param name Name of the permission
+   */
   public Permission(String name) {
     this.name = name;
   }
@@ -36,7 +41,7 @@ public class Permission {
    * Checks if one permission implies the other, for example
    * permission to read /config might imply the permission
    * to read /config/special
-   *
+   * <p/>
    * Permission implies another permission if both are equal.
    * Override this for more complex permissions.
    *

@@ -18,7 +18,6 @@
 
 package gabriel.components;
 
-import gabriel.Principal;
 import gabriel.Permission;
 
 import java.util.*;
@@ -28,12 +27,18 @@ import java.util.*;
  * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: CallAccessManagerImpl.java,v 1.1.1.1 2004-06-16 07:56:38 stephan Exp $
+ * @version $Id: CallAccessManagerImpl.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
  */
 
 public class CallAccessManagerImpl implements CallAccessManager {
   private AccessManager accessManager;
   private Map methodMap;
+
+  /**
+   * Creates CallAccessManager from an AccessManager.
+   *
+   * @param accessManager AccessManager to use for permission checking
+   */
 
   public CallAccessManagerImpl(AccessManager accessManager) {
     this.accessManager = accessManager;
@@ -41,41 +46,65 @@ public class CallAccessManagerImpl implements CallAccessManager {
   }
 
   /**
-   * Add a list of method names for a permission.
+   * Add a method for a permission. The method is specified
+   * by a class and the method name.
+   *
+   * @param permission Permission which is needed to execute method
+   * @param klass      Class with the method
+   * @param method     Name of the method to restirct access to
+   */
+  public void addMethod(Permission permission, Class klass, String method) {
+    addMethod(permission, klass.getName() + "." + method);
+  }
+
+  /**
+   * Add a method for a permission.
    * Method names should follow "class.methodName"
    *
    * @param permission Permission which is needed to execute method
+   * @param methodName Name of method with access restrictions
+   */
+
+  public void addMethod(Permission permission, String methodName) {
+    Set permissions;
+    if (methodMap.containsKey(methodName)) {
+      permissions = (Set) methodMap.get(methodName);
+      permissions.add(permission);
+    } else {
+      permissions = new HashSet();
+      permissions.add(permission);
+      methodMap.put(methodName, permissions);
+    }
+  }
+
+  /**
+   * Add a list of method names for a permission.
+   * Method names should follow "class.methodName"
+   *
+   * @param permission  Permission which is needed to execute method
    * @param methodNames Names of methods with access restrictions
    */
   public void addMethods(Permission permission, List methodNames) {
     Iterator iterator = methodNames.iterator();
     while (iterator.hasNext()) {
       String methodName = (String) iterator.next();
-      Set permissions = null;
-      if (methodMap.containsKey(methodName)) {
-        permissions = (Set) methodMap.get(methodName);
-        permissions.add(permission);
-      } else {
-        permissions = new HashSet();
-        permissions.add(permission);
-        methodMap.put(methodName, permissions);
-      }
+      addMethod(permission, methodName);
     }
   }
 
-    /**
+  /**
    * Add an array of method names for a permission.
    * Convinience method.
    *
-   * @param permission Permission which is needed to execute method
+   * @param permission  Permission which is needed to execute method
    * @param methodNames Names of methods with access restrictions
    */
   public void addMethods(Permission permission, String[] methodNames) {
     addMethods(permission, Arrays.asList(methodNames));
   }
 
-   /**
-   * Get all permissions from which one is needed to execute the method
+  /**
+   * Get all permissions from which one is needed to execute the method.
    *
    * @param methodName Method name to get the permission from
    * @return Set of permissions which restrict method execution
@@ -88,16 +117,16 @@ public class CallAccessManagerImpl implements CallAccessManager {
     }
   }
 
-    /**
+  /**
    * Check if a principal can execute a method.
    * The principal needs one permission for the method to
    * be allowed to execute it.
    *
-   * @param principal Principal to check access to the method
+   * @param principals Set of principal to check access to the method
    * @param methodName Name of the method to check
    * @return true if principal is allowed to execute the method
    */
-  public boolean checkPermission(Principal principal, String methodName) {
+  public boolean checkPermission(Set principals, String methodName) {
     // get all Permissions for methodName
     // check all Permissions with accessManager and principal
     Set permissions = (Set) methodMap.get(methodName);
@@ -106,8 +135,22 @@ public class CallAccessManagerImpl implements CallAccessManager {
 
     while (iterator.hasNext()) {
       Permission permission = (Permission) iterator.next();
-      hasPermission = hasPermission || accessManager.checkPermission(principal, permission);
+      hasPermission = hasPermission || accessManager.checkPermission(principals, permission);
     }
     return hasPermission;
+  }
+
+  /**
+   * Check if a principal can execute a method.
+   * The principal needs one permission for the method to
+   * be allowed to execute it.
+   *
+   * @param principals Set of principals to check access to the method
+   * @param klass      Class with the method
+   * @param method     Name of the method to check
+   * @return true if principal is allowed to execute the method
+   */
+  public boolean checkPermission(Set principals, Class klass, String method) {
+    return checkPermission(principals, klass.getName() + "." + method);
   }
 }

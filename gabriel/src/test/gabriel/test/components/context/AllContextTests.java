@@ -16,21 +16,17 @@
  *  limitations under the License.
  */
 
-package gabriel.test.components;
+package gabriel.test.components.context;
 
-import gabriel.test.components.context.AllContextTests;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 
-public class AllComponentsTests extends TestCase {
+public class AllContextTests extends TestCase {
   public static Test suite() {
     TestSuite s = new TestSuite();
-    s.addTest(AllContextTests.suite());
-    s.addTest(AccessManagerTest.suite());
-    s.addTest(CallAccessManagerTest.suite());
-    s.addTest(AclManagerTest.suite());
+    s.addTest(OwnerAccessContextTest.suite());
     return s;
   }
 }

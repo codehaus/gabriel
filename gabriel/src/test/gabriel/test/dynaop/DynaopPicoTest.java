@@ -18,48 +18,50 @@
 
 package gabriel.test.dynaop;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import org.jmock.core.MockObjectSupportTestCase;
-import org.nanocontainer.dynaop.DynaopComponentAdapterFactory;
-import org.picocontainer.defaults.DefaultComponentAdapterFactory;
-import org.picocontainer.defaults.DefaultPicoContainer;
-import org.picocontainer.MutablePicoContainer;
 import dynaop.Aspects;
 import dynaop.Pointcuts;
 import dynaop.util.Closure;
 import gabriel.Principal;
+import gabriel.components.CallAccessManager;
+import gabriel.components.dynaop.AccessInterceptor;
+import junit.framework.Test;
+import junit.framework.TestSuite;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
+import org.nanocontainer.dynaop.DynaopComponentAdapterFactory;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.defaults.DefaultComponentAdapterFactory;
+import org.picocontainer.defaults.DefaultPicoContainer;
 
-public class DynaopPicoTest extends MockObjectSupportTestCase {
+public class DynaopPicoTest extends MockObjectTestCase {
+  private Mock callAccessManager;
+
   public static Test suite() {
     return new TestSuite(DynaopPicoTest.class);
   }
 
   protected void setUp() throws Exception {
     super.setUp();
+    this.callAccessManager = mock(CallAccessManager.class);
   }
 
   public void testAnnotateWithMixin() {
     Aspects aspects = new Aspects();
     aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
-                        Pointcuts.ALL_METHODS, new AccessInterceptor());
+        Pointcuts.ALL_METHODS, new AccessInterceptor((CallAccessManager) callAccessManager.proxy()));
     aspects.mixin(Pointcuts.instancesOf(SecureObject.class),
-        SecureMixin.class, new Closure() {
+        OwnableMixin.class, new Closure() {
           public void execute(Object o) {
           }
         });
 
-    DynaopComponentAdapterFactory factory = new DynaopComponentAdapterFactory(
-        new DefaultComponentAdapterFactory(), aspects);
+    callAccessManager.expects(atLeastOnce()).method("checkPermission").will(returnValue(false));
+
+    DynaopComponentAdapterFactory factory = new DynaopComponentAdapterFactory(new DefaultComponentAdapterFactory(), aspects);
     MutablePicoContainer container = new DefaultPicoContainer(factory);
     container.registerComponentImplementation(SecureObject.class, SecureObjectImpl.class);
 
     SecureObject object = (SecureObject) container.getComponentInstance(SecureObject.class);
-    assertEquals("Object has default name.", "Empty", object.getName());
-    Ownable ownable = (Ownable) object;
-    Principal owner = new Principal("Owner");
-    ownable.setOwner(owner);
-    assertEquals("Mixin contains owner.", owner, ownable.getOwner());
 
     Principal notAllowed = new Principal("NotAllowedPrincipal");
     try {
@@ -68,7 +70,5 @@ public class DynaopPicoTest extends MockObjectSupportTestCase {
     } catch (SecurityException e) {
       // System.out.println(e.getMessage());
     }
-    assertEquals("Name not set by wrong principal.", "Empty", object.getName());
-
   }
 }

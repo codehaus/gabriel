@@ -18,20 +18,45 @@
 
 package gabriel.components.context;
 
+import gabriel.Principal;
+
 import java.util.Set;
 
+
 /**
- * Stores the context for access checks.
+ * AccessContext which adds a Owner principal to the set if
+ * the owner of an object is in the original set.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AccessContext.java,v 1.3 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: OwnerAccessContext.java,v 1.1 2004-06-24 07:26:21 stephan Exp $
  */
-public interface AccessContext {
+public class OwnerAccessContext implements AccessContext {
+  private static Principal owner = new Principal("Owner");
+  private Ownable owned;
+
+  /**
+   * Creates OwnerAccessContex from Ownable.
+   *
+   * @param owned An object wih an owner
+   */
+  public OwnerAccessContext(Ownable owned) {
+    this.owned = owned;
+  }
+
   /**
    * Modify the list of principals depending on the context.
+   * Set is modified by method. Perhaps a new set
+   * should be created.
    *
-   * @param principals Original principal set
-   * @return modified principal set
+   * @param principals Original principal list
+   * @return modified principal list
    */
-  public Set modifyPrincipals(Set principals);
+  public Set modifyPrincipals(Set principals) {
+    if (principals.contains(owner)) return principals;
+
+    if (principals.contains(owned.getOwner())) {
+      principals.add(owner);
+    }
+    return principals;
+  }
 }

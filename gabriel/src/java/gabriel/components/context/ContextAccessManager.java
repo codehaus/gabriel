@@ -19,26 +19,27 @@
 package gabriel.components.context;
 
 import gabriel.Permission;
-import gabriel.Principal;
+
+import java.util.Set;
 
 /**
  * ContextAccessManager checks for access rights with permissions
- * in a certain context
+ * in a certain context.
  *
  * @author Stephan J. Schmidt
- * @version $Id: ContextAccessManager.java,v 1.1 2004-06-18 08:39:40 stephan Exp $
+ * @version $Id: ContextAccessManager.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
  */
 public interface ContextAccessManager {
-    /**
-     * Check if a principal posseses the permission
-     * Perhaps return int with -1,0,1 for denied,neutral,allow
-     * The context could contain ownership and resources
-     * so ContextAccessManager modifies the principals
-     *
-     * @param principal  Principal to check permission for
-     * @param permission Permission to check
-     * @param context    AccessContext to consider when checking for a permission
-     * @return true if principal has permission
-     */
-    public boolean checkPermission(Principal principal, Permission permission, AccessContext context);
+  /**
+   * Check if a principal posseses the permission.
+   * Perhaps return int with -1,0,1 for denied,neutral,allow.
+   * The context could contain ownership and resources
+   * so ContextAccessManager modifies the principals.
+   *
+   * @param principals Set of principals to check permission for
+   * @param permission Permission to check
+   * @param context    AccessContext to consider when checking for a permission
+   * @return true if principal has permission
+   */
+  public boolean checkPermission(Set principals, Permission permission, AccessContext context);
 }

@@ -16,11 +16,24 @@
  *  limitations under the License.
  */
 
-package gabriel.test.dynaop;
+package gabriel.components;
 
 import gabriel.Principal;
+import gabriel.acl.Acl;
 
-public interface Ownable {
-  public void setOwner(Principal owner);
-  public Principal getOwner();
+/**
+ * AclStore manages Acl lists like creating, removing and persistent storage.
+ *
+ * @author Stephan J. Schmidt
+ * @version $Id: AclStore.java,v 1.1 2004-06-24 07:26:21 stephan Exp $
+ */
+public interface AclStore {
+  /**
+   * Get an Acl from the store.
+   *
+   * @param owner Principal who owns the Acl
+   * @param name  Name of the Acl
+   * @return Requested Acl
+   */
+  public Acl getAcl(Principal owner, String name);
 }
