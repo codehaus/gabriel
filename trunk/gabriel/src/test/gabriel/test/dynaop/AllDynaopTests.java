@@ -28,6 +28,7 @@ public class AllDynaopTests extends TestCase {
   public static Test suite() {
     TestSuite s = new TestSuite();
     s.addTest(InterceptorTest.suite());
+    s.addTest(DynaopPicoTest.suite());
     return s;
   }
 }
