@@ -1,5 +1,8 @@
-1. Example
-------------
+1. Introduction
+---------------
+
+What is Gabriel? Gabriel is a security framework to restirct actions of users.
+Think about EJB security but without EJB.
 
 > ant test
 
