@@ -21,14 +21,14 @@ package gabriel.components.dynaop;
 import dynaop.Interceptor;
 import dynaop.Invocation;
 import gabriel.Subject;
-import gabriel.components.CallAccessManager;
+import gabriel.components.MethodAccessManager;
 
 import java.util.Set;
 
 public class AccessInterceptor implements Interceptor {
-  private CallAccessManager manager;
+  private MethodAccessManager manager;
 
-  public AccessInterceptor(CallAccessManager manager) {
+  public AccessInterceptor(MethodAccessManager manager) {
     this.manager = manager;
   }
 

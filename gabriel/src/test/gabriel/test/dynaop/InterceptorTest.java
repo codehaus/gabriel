@@ -24,7 +24,7 @@ import dynaop.ProxyFactory;
 import dynaop.util.Closure;
 import gabriel.Principal;
 import gabriel.Subject;
-import gabriel.components.CallAccessManager;
+import gabriel.components.MethodAccessManager;
 import gabriel.components.context.ContextCallAccessManager;
 import gabriel.components.dynaop.AccessInterceptor;
 import gabriel.components.dynaop.OwnableAccessInterceptor;
@@ -54,7 +54,7 @@ public class InterceptorTest extends MockObjectTestCase {
   protected void setUp() throws Exception {
     super.setUp();
     this.contextCallAccessManager = mock(ContextCallAccessManager.class);
-    this.callAccessManager = mock(CallAccessManager.class);
+    this.callAccessManager = mock(MethodAccessManager.class);
 
     principals = new HashSet();
     Subject subject = Subject.get();
@@ -108,7 +108,7 @@ public class InterceptorTest extends MockObjectTestCase {
         will(returnValue(false));
 
     aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
-        Pointcuts.ALL_METHODS, new AccessInterceptor((CallAccessManager) callAccessManager.proxy()));
+        Pointcuts.ALL_METHODS, new AccessInterceptor((MethodAccessManager) callAccessManager.proxy()));
 
     proxyFactory = ProxyFactory.getInstance(aspects);
 

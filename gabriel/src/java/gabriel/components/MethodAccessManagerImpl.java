@@ -23,24 +23,24 @@ import gabriel.Permission;
 import java.util.*;
 
 /**
- * CallAccessManager checks if a client is allowed to execute a method
+ * MethodAccessManager checks if a client is allowed to execute a method
  * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: CallAccessManagerImpl.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: MethodAccessManagerImpl.java,v 1.1 2004-06-24 10:22:44 stephan Exp $
  */
 
-public class CallAccessManagerImpl implements CallAccessManager {
+public class MethodAccessManagerImpl implements MethodAccessManager {
   private AccessManager accessManager;
   private Map methodMap;
 
   /**
-   * Creates CallAccessManager from an AccessManager.
+   * Creates MethodAccessManager from an AccessManager.
    *
    * @param accessManager AccessManager to use for permission checking
    */
 
-  public CallAccessManagerImpl(AccessManager accessManager) {
+  public MethodAccessManagerImpl(AccessManager accessManager) {
     this.accessManager = accessManager;
     methodMap = new HashMap();
   }

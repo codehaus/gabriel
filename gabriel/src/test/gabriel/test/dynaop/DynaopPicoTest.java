@@ -22,7 +22,7 @@ import dynaop.Aspects;
 import dynaop.Pointcuts;
 import dynaop.util.Closure;
 import gabriel.Principal;
-import gabriel.components.CallAccessManager;
+import gabriel.components.MethodAccessManager;
 import gabriel.components.dynaop.AccessInterceptor;
 import junit.framework.Test;
 import junit.framework.TestSuite;
@@ -42,13 +42,13 @@ public class DynaopPicoTest extends MockObjectTestCase {
 
   protected void setUp() throws Exception {
     super.setUp();
-    this.callAccessManager = mock(CallAccessManager.class);
+    this.callAccessManager = mock(MethodAccessManager.class);
   }
 
   public void testAnnotateWithMixin() {
     Aspects aspects = new Aspects();
     aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
-        Pointcuts.ALL_METHODS, new AccessInterceptor((CallAccessManager) callAccessManager.proxy()));
+        Pointcuts.ALL_METHODS, new AccessInterceptor((MethodAccessManager) callAccessManager.proxy()));
     aspects.mixin(Pointcuts.instancesOf(SecureObject.class),
         OwnableMixin.class, new Closure() {
           public void execute(Object o) {

@@ -19,21 +19,21 @@
 package gabriel.components.context;
 
 import gabriel.components.AccessManager;
-import gabriel.components.CallAccessManagerImpl;
+import gabriel.components.MethodAccessManagerImpl;
 
 import java.util.Set;
 
 /**
- * CallAccessManager checks if a client is allowed to execute a method
+ * MethodAccessManager checks if a client is allowed to execute a method
  * by mapping method names to permissions. Principals may
  * be modified by context.
  * 
  * @author Stephan J. Schmidt
- * @version $Id: ContextCallAccessManagerImpl.java,v 1.1 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: ContextCallAccessManagerImpl.java,v 1.2 2004-06-24 10:22:44 stephan Exp $
  */
 
 public class ContextCallAccessManagerImpl
-    extends CallAccessManagerImpl
+    extends MethodAccessManagerImpl
     implements ContextCallAccessManager {
 
   /**

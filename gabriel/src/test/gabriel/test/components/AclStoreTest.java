@@ -28,13 +28,13 @@ import org.jmock.core.MockObjectSupportTestCase;
 
 import java.io.StringReader;
 
-public class AclManagerTest extends MockObjectSupportTestCase {
+public class AclStoreTest extends MockObjectSupportTestCase {
 
   private Principal owner;
   private String name;
 
   public static Test suite() {
-    return new TestSuite(AclManagerTest.class);
+    return new TestSuite(AclStoreTest.class);
   }
 
   protected void setUp() throws Exception {

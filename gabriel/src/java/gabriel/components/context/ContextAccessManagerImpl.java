@@ -19,9 +19,10 @@
 package gabriel.components.context;
 
 import gabriel.Permission;
+import gabriel.Principal;
 import gabriel.components.AccessManager;
-import gabriel.components.AccessManagerImpl;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,16 +30,38 @@ import java.util.Set;
  * in a certain context.
  *
  * @author Stephan J. Schmidt
- * @version $Id: ContextAccessManagerImpl.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: ContextAccessManagerImpl.java,v 1.3 2004-06-24 10:22:44 stephan Exp $
  */
 
-public class ContextAccessManagerImpl extends AccessManagerImpl implements ContextAccessManager {
+public class ContextAccessManagerImpl implements ContextAccessManager {
   private AccessManager accessManager;
 
   /**
    * Default constructor.
    */
-  public ContextAccessManagerImpl() {
+  public ContextAccessManagerImpl(AccessManager accessManager) {
+    this.accessManager = accessManager;
+  }
+
+  /**
+   * Delegate
+   */
+  public boolean checkPermission(Set principals, Permission permission) {
+    return accessManager.checkPermission(principals, permission);
+  }
+
+  /**
+   * Delegate
+   */
+  public void addPermission(Principal principal, Permission permission) {
+    accessManager.addPermission(principal, permission);
+  }
+
+  /**
+   * Delegate
+   */
+  public void addPermission(Principal principal, List permissions) {
+    accessManager.addPermission(principal, permissions);
   }
 
   /**
@@ -54,6 +77,6 @@ public class ContextAccessManagerImpl extends AccessManagerImpl implements Conte
    */
   public boolean checkPermission(Set principals, Permission permission, AccessContext context) {
     principals = context.modifyPrincipals(principals);
-    return checkPermission(principals, permission);
+    return accessManager.checkPermission(principals, permission);
   }
 }
