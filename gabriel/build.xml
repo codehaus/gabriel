@@ -2,7 +2,7 @@
 
 <!--
   ** @author Stephan J. Schmidt
-  ** @version $Id: build.xml,v 1.4 2004-06-25 08:28:38 stephan Exp $
+  ** @version $Id: build.xml,v 1.5 2004-06-28 11:26:13 stephan Exp $
   -->
 <project basedir="." default="compile" name="Gabriel">
 
@@ -30,6 +30,20 @@
     <mkdir dir="${dist}/distributions"/>
     <mkdir dir="${dist}/jars"/>
   </target>
+
+  <patternset id="dist.sources">
+     <include name="Changes.txt"/>
+     <include name="conf/**"/>
+     <include name="docs/**"/>
+     <include name="src/**"/>
+     <include name="licenses/**"/>
+     <include name="README"/>
+     <include name="NOTICE"/>
+     <include name="LICENSE.txt"/>
+     <include name="build.xml"/>
+     <include name="lib/**"/>
+     <include name="jar/**"/>
+  </patternset>
 
   <target name="compile" depends="prepare">
     <javac srcdir="${src}/java" destdir="${out}" classpathref="classpath" debug="${debug}"/>
@@ -78,32 +92,12 @@
     <copy file="${jar}/${appname}.jar" tofile="${dist}/jars/${appname}-${version}-${status}.jar"/>
     <zip destfile="${dist}/distributions/${appname}-${version}-${status}-src.zip">
       <zipfileset dir="." prefix="${appname}-${version}-${status}">
-        <include name="Changes.txt"/>
-        <include name="conf/**"/>
-        <include name="docs/**"/>
-        <include name="src/**"/>
-        <include name="licenses/**"/>
-        <include name="README"/>
-        <include name="NOTICE"/>
-        <include name="LICENSE.txt"/>
-        <include name="build.xml"/>
-        <include name="lib/**"/>
-        <include name="jar/**"/>
+        <patternset refid="dist.sources"/>
       </zipfileset>
     </zip>
     <tar destfile="${dist}/distributions/${appname}-${version}-${status}-src.tar.gz" compression="gzip">
       <tarfileset dir="." prefix="${appname}-${version}-${status}" mode="700">
-        <include name="Changes.txt"/>
-        <include name="conf/**"/>
-        <include name="docs/**"/>
-        <include name="src/**"/>
-        <include name="licenses/**"/>
-        <include name="README"/>
-        <include name="NOTICE"/>
-        <include name="LICENSE.txt"/>
-        <include name="build.xml"/>
-        <include name="lib/**"/>
-        <include name="jar/**"/>
+        <patternset refid="dist.sources"/>
       </tarfileset>
     </tar>
   </target>
