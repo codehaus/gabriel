@@ -2,7 +2,7 @@
 
 <!--
   ** @author Stephan J. Schmidt
-  ** @version $Id: build.xml,v 1.5 2004-06-28 11:26:13 stephan Exp $
+  ** @version $Id: build.xml,v 1.6 2004-06-29 13:00:05 stephan Exp $
   -->
 <project basedir="." default="compile" name="Gabriel">
 
@@ -124,7 +124,7 @@
       version="true"
       use="true"
       windowtitle="Gabriel Access Framework">
-      <doctitle><![CDATA[<h1>Radeox</h1>]]></doctitle>
+      <doctitle><![CDATA[<h1>Gabriel</h1>]]></doctitle>
       <bottom><![CDATA[<i>Copyright &#169; 2003 Matthias L. Jugel, Stephan J. Schmidt. All Rights Reserved
 .</i>]]></bottom>
       <!--    <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/> -->
