@@ -1,0 +1,27 @@
+The framework has 3 parts:
+
+1.) ACL core framework for matching principals to permissions
+
+2.) Components like AccessManager to integrate ACLs with applications and store and create ACLs
+
+3.) Interceptors to protect method calls
+
+3 depends on 2 depends on 1
+
+Methods are mapped to permissions like
+("POST_BLOG" -> Blog.post, Blog.store)
+
+This way permissions like POST_BLOG can be used to protect method calls
+and from within the GUI the permissions can be used to check 
+wether to display a "POST" button.
+
+Principals are mapped to permissions like
+("Editor" -> "POST_BLOG", "REMOVE_POST")
+
+Users are mapped to principals, but this is outside the scope of the
+framework right now and might need another framework
+like OSUSer to map principals to users and to authenticate
+users.
+
+Currently the application would map users to principals
+somehow.
