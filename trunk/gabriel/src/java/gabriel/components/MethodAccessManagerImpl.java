@@ -27,7 +27,7 @@ import java.util.*;
  * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: MethodAccessManagerImpl.java,v 1.2 2004-06-24 12:37:49 stephan Exp $
+ * @version $Id: MethodAccessManagerImpl.java,v 1.3 2004-06-24 14:48:40 stephan Exp $
  */
 
 public class MethodAccessManagerImpl implements MethodAccessManager {
@@ -131,15 +131,20 @@ public class MethodAccessManagerImpl implements MethodAccessManager {
   public boolean checkPermission(Set principals, String methodName) {
     // get all Permissions for methodName
     // check all Permissions with accessManager and principal
-    Set permissions = (Set) methodMap.get(methodName);
-    Iterator iterator = permissions.iterator();
-    boolean hasPermission = false;
+    if (methodMap.containsKey(methodName)) {
+      Set permissions = (Set) methodMap.get(methodName);
+      Iterator iterator = permissions.iterator();
+      boolean hasPermission = false;
 
-    while (iterator.hasNext()) {
-      Permission permission = (Permission) iterator.next();
-      hasPermission = hasPermission || accessManager.checkPermission(principals, permission);
+      while (iterator.hasNext()) {
+        Permission permission = (Permission) iterator.next();
+        hasPermission = hasPermission || accessManager.checkPermission(principals, permission);
+      }
+      return hasPermission;
+    } else {
+      // If the method is not in the map, execution is allowed
+      return true;
     }
-    return hasPermission;
   }
 
   /**

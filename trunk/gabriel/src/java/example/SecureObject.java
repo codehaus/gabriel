@@ -16,11 +16,10 @@
  *  limitations under the License.
  */
 
-package gabriel.test.dynaop;
-
-import gabriel.Principal;
+package example;
 
 public interface SecureObject {
-  public void setName(Principal principal, String name);
+  public void setName(String name);
+
   public String getName();
 }
