@@ -23,10 +23,9 @@ import dynaop.Pointcuts;
 import dynaop.ProxyFactory;
 import gabriel.Principal;
 import gabriel.Subject;
-import gabriel.components.*;
+import gabriel.components.DefaultMethodAccessManager;
+import gabriel.components.MethodAccessManager;
 import gabriel.components.dynaop.AccessInterceptor;
-import gabriel.components.io.FileAclStore;
-import gabriel.components.io.FileMethodStore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -39,14 +38,7 @@ import java.util.Set;
 public class ProtectMethods {
   public static void main(String[] args) {
 
-    // First we setup some components which manage access
-    // checking for us. We use versions that use files
-    // to store mappings
-    AclStore aclStore = new FileAclStore();
-    MethodStore methodStore = new FileMethodStore();
-
-    AccessManager manager = new AccessManagerImpl(aclStore);
-    MethodAccessManager methodAccessManager = new MethodAccessManagerImpl(manager, methodStore);
+    MethodAccessManager methodAccessManager = new DefaultMethodAccessManager();
 
     // The we setup our aop to wrap objects
     Aspects aspects = new Aspects();
@@ -66,7 +58,7 @@ public class ProtectMethods {
     System.out.print("We try to call setName() on \""+object.getName()+"\" ... ");
     try {
       object.setName("Changed!");
-    } catch (Exception e) {
+    } catch (SecurityException e) {
       System.out.println("denied.");
     }
     System.out.println("object.name = " + object.getName());
