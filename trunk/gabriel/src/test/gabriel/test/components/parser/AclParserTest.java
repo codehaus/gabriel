@@ -22,6 +22,7 @@ import gabriel.Permission;
 import gabriel.Principal;
 import gabriel.acl.Acl;
 import gabriel.components.parser.AclParser;
+import gabriel.components.parser.AclParserImpl;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.core.MockObjectSupportTestCase;
@@ -42,7 +43,7 @@ public class AclParserTest extends MockObjectSupportTestCase {
   }
 
   public void testParse() {
-    AclParser parser = new AclParser();
+    AclParser parser = new AclParserImpl();
 
     String source = "PP1 { PM1 PM2 \n" +
         "                  PM3 }" +
@@ -61,7 +62,7 @@ public class AclParserTest extends MockObjectSupportTestCase {
   }
 
   public void testNegativePermissions() {
-    AclParser parser = new AclParser();
+    AclParser parser = new AclParserImpl();
     String source = "-PP1 { PM1 }";
 
     Acl acl = parser.parse(owner, name, source);
@@ -71,7 +72,7 @@ public class AclParserTest extends MockObjectSupportTestCase {
   }
 
   public void testNegativePermissionWithSpace() {
-    AclParser parser = new AclParser();
+    AclParser parser = new AclParserImpl();
     String source = "- PP1 { PM1 }";
 
     Acl acl = parser.parse(owner, name, source);

@@ -25,7 +25,7 @@ import gabriel.components.AccessManager;
 import gabriel.components.AccessManagerImpl;
 import gabriel.components.AclStore;
 import gabriel.components.io.FileAclStore;
-import gabriel.components.parser.AclParser;
+import gabriel.components.parser.AclParserImpl;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.Mock;
@@ -48,7 +48,7 @@ public class AccessManagerTest extends MockObjectTestCase {
     super.setUp();
     mockAclStore = mock(AclStore.class);
 
-    accessManager = new AccessManagerImpl(new FileAclStore(new AclParser()) {
+    accessManager = new AccessManagerImpl(new FileAclStore(new AclParserImpl()) {
       public Acl getAcl(Principal owner, String name) {
         return new Acl(owner, name);
       }
