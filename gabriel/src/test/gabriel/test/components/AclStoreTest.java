@@ -21,12 +21,10 @@ package gabriel.test.components;
 import gabriel.Permission;
 import gabriel.Principal;
 import gabriel.acl.Acl;
-import gabriel.components.io.FileAclStore;
+import gabriel.components.parser.AclParser;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.core.MockObjectSupportTestCase;
-
-import java.io.StringReader;
 
 public class AclStoreTest extends MockObjectSupportTestCase {
 
@@ -44,12 +42,13 @@ public class AclStoreTest extends MockObjectSupportTestCase {
   }
 
   public void testParse() {
-    FileAclStore manager = new FileAclStore();
+    AclParser parser = new AclParser();
+
     String source = "PP1 { PM1 PM2 \n" +
         "                  PM3 }" +
         "            PP2 { PM1 }";
 
-    Acl acl = manager.parse(owner, name, new StringReader(source));
+    Acl acl = parser.parse(owner, name, source);
 
     assertEquals("PP1 has PM1",
         1, acl.checkPermission(new Principal("PP1"), new Permission("PM1")));
@@ -62,10 +61,10 @@ public class AclStoreTest extends MockObjectSupportTestCase {
   }
 
   public void testNegativePermissions() {
-    FileAclStore manager = new FileAclStore();
+    AclParser parser = new AclParser();
     String source = "-PP1 { PM1 }";
 
-    Acl acl = manager.parse(owner, name, new StringReader(source));
+    Acl acl = parser.parse(owner, name, source);
 
     assertEquals("PP1 is denied PM1",
         -1, acl.checkPermission(new Principal("PP1"), new Permission("PM1")));

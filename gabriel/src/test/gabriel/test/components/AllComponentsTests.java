@@ -20,6 +20,7 @@ package gabriel.test.components;
 
 import gabriel.test.components.context.AllContextTests;
 import gabriel.test.components.io.AllIoTests;
+import gabriel.test.components.parser.AllParserTests;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
@@ -33,6 +34,7 @@ public class AllComponentsTests extends TestCase {
     s.addTest(CallAccessManagerTest.suite());
     s.addTest(AclStoreTest.suite());
     s.addTest(AllIoTests.suite());
+    s.addTest(AllParserTests.suite());
     return s;
   }
 

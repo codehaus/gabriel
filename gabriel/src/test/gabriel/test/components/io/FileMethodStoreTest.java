@@ -20,6 +20,7 @@ package gabriel.test.components.io;
 
 import gabriel.Permission;
 import gabriel.components.io.FileMethodStore;
+import gabriel.components.parser.MethodParser;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.core.MockObjectSupportTestCase;
@@ -39,7 +40,7 @@ public class FileMethodStoreTest extends MockObjectSupportTestCase {
   }
 
   public void testParsePermissionsAndMethods() {
-    FileMethodStore store = new FileMethodStore();
+    FileMethodStore store = new FileMethodStore(new MethodParser());
     String source = "PM1 { M1 M2 \n" +
         "                  M3 }" +
         "            PM2 { M1 }";
@@ -53,10 +54,10 @@ public class FileMethodStoreTest extends MockObjectSupportTestCase {
   }
 
   public void testHandleEmptyMethodBlocks() {
-    FileMethodStore store = new FileMethodStore();
+    FileMethodStore store = new FileMethodStore(new MethodParser());
     String source = "PM1 { } PM2 { M2 }";
 
     Map methodMap = store.parse(new StringReader(source));
     assertTrue("PM2 contains M2", ((Set) methodMap.get("M2")).contains(new Permission("PM2")));
- }
+  }
 }
