@@ -22,36 +22,37 @@ import gabriel.Permission;
 import gabriel.Principal;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * AccessManager checks for access rights with permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AccessManager.java,v 1.1.1.1 2004-06-16 07:56:38 stephan Exp $
+ * @version $Id: AccessManager.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
  */
 public interface AccessManager {
   /**
-   * Check if a principal posseses the permission
-   * Perhaps return int with -1,0,1 for denied,neutral,allow
+   * Check if a principal posseses the permission.
+   * Perhaps return int with -1,0,1 for denied,neutral,allow.
    *
-   * @param principal Principal to check permission for
+   * @param principals Set of principal to check permission for
    * @param permission Permission to check
    * @return true if principal has permission
    */
-  public boolean checkPermission(Principal principal, Permission permission);
+  public boolean checkPermission(Set principals, Permission permission);
 
   /**
-   * Add a permission for a principal
+   * Add a permission for a principal.
    *
-   * @param principal Principal to give permission
+   * @param principal  Principal to give permission
    * @param permission Permission to give
    */
   public void addPermission(Principal principal, Permission permission);
 
   /**
-   * Add a list of permission for a principal
+   * Add a list of permission for a principal.
    *
-   * @param principal Principal to give permissions
+   * @param principal   Principal to give permissions
    * @param permissions List of permissions to give
    */
   public void addPermission(Principal principal, List permissions);

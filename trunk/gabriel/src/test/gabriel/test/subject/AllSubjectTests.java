@@ -1,8 +1,8 @@
 /*
- *      Copyright 2001-2004 Fraunhofer Gesellschaft, Munich, Germany, for its
+ *      Copyright 2001-2004 Fraunhofer Gesellschaft, Munich, Germany, for its 
  *      Fraunhofer Institute Computer Architecture and Software Technology
  *      (FIRST), Berlin, Germany
- *
+ *      
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -16,21 +16,22 @@
  *  limitations under the License.
  */
 
-package gabriel.test.components;
+package gabriel.test.subject;
 
-import gabriel.test.components.context.AllContextTests;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+/**
+ * @author stephan
+ * @version $id$
+ */
 
-public class AllComponentsTests extends TestCase {
+public class AllSubjectTests extends TestCase {
+
   public static Test suite() {
     TestSuite s = new TestSuite();
-    s.addTest(AllContextTests.suite());
-    s.addTest(AccessManagerTest.suite());
-    s.addTest(CallAccessManagerTest.suite());
-    s.addTest(AclManagerTest.suite());
+    s.addTest(SubjectTest.suite());
     return s;
   }
 }

@@ -18,13 +18,14 @@
 
 package gabriel.components;
 
-import gabriel.Principal;
 import gabriel.Permission;
+import gabriel.Principal;
 import gabriel.acl.Acl;
 import gabriel.acl.AclEntry;
 
-import java.util.List;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * AccessManager checks for access rights with permissions.
@@ -33,39 +34,47 @@ import java.util.Iterator;
  * to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AccessManagerImpl.java,v 1.1.1.1 2004-06-16 07:56:38 stephan Exp $
+ * @version $Id: AccessManagerImpl.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
  */
 public class AccessManagerImpl implements AccessManager {
   private Acl acl;
   private Principal owner;
 
-  // Probably manage several ACL lists
+  /**
+   * Default constructor. Probably should manage several
+   * ACL lists by name with one default list "Default".
+   */
   public AccessManagerImpl() {
     owner = new Principal("owner");
     acl = new Acl(owner, "Access");
   }
 
   /**
-   * Check if a principal posseses the permission
-   * Perhaps return int with -1,0,1 for denied,neutral,allow
+   * Check if a principal posseses the permission.
+   * Perhaps return int with -1,0,1 for denied,neutral,allow.
    *
-   * @param principal Principal to check permission for
+   * @param principals Set of principal to check permission for
    * @param permission Permission to check
    * @return true if principal has permission
    */
-  public boolean checkPermission(Principal principal, Permission permission) {
-    return acl.checkPermission(principal, permission);
+  public boolean checkPermission(Set principals, Permission permission) {
+    return acl.checkPermission(principals, permission);
   }
 
-  // Adds dependency on AclEntry
+  /**
+   * Add an AclEntry to the Acl. Adds
+   * dependency on AclEntry.
+   *
+   * @param entry AclEntry to add
+   */
   public void addEntry(AclEntry entry) {
     acl.addEntry(owner, entry);
   }
 
   /**
-   * Add a list of permission for a principal
+   * Add a list of permission for a principal.
    *
-   * @param principal Principal to give permissions
+   * @param principal   Principal to give permissions
    * @param permissions List of permissions to give
    */
   public void addPermission(Principal principal, List permissions) {
@@ -80,9 +89,9 @@ public class AccessManagerImpl implements AccessManager {
   }
 
   /**
-   * Add a permission for a principal
+   * Add a permission for a principal.
    *
-   * @param principal Principal to give permission
+   * @param principal  Principal to give permission
    * @param permission Permission to give
    */
   public void addPermission(Principal principal, Permission permission) {

@@ -18,13 +18,13 @@
 
 package gabriel.test;
 
+import gabriel.test.acl.AllAclTests;
+import gabriel.test.components.AllComponentsTests;
+import gabriel.test.dynaop.AllDynaopTests;
+import gabriel.test.subject.AllSubjectTests;
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
-import gabriel.test.acl.AllAclTests;
-import gabriel.test.dynaop.AllDynaopTests;
-import gabriel.test.components.AllComponentsTests;
 
 public class AllTests extends TestCase {
 
@@ -33,6 +33,7 @@ public class AllTests extends TestCase {
     s.addTest(AllAclTests.suite());
     s.addTest(AllDynaopTests.suite());
     s.addTest(AllComponentsTests.suite());
+    s.addTest(AllSubjectTests.suite());
     return s;
   }
 }

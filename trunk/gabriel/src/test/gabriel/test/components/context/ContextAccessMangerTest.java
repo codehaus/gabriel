@@ -16,38 +16,47 @@
  *  limitations under the License.
  */
 
-package gabriel.test.components;
+package gabriel.test.components.context;
 
 import gabriel.Permission;
 import gabriel.Principal;
-import gabriel.components.AccessManager;
-import gabriel.components.AccessManagerImpl;
+import gabriel.components.context.AccessContext;
+import gabriel.components.context.ContextAccessManager;
+import gabriel.components.context.ContextAccessManagerImpl;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jmock.core.MockObjectSupportTestCase;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class AccessManagerTest extends MockObjectSupportTestCase {
-  private AccessManager accessManager;
+public class ContextAccessMangerTest extends MockObjectTestCase {
+  private Mock mockContext;
+  private ContextAccessManager contextAccessManager;
 
   public static Test suite() {
-    return new TestSuite(AccessManagerTest.class);
+    return new TestSuite(ContextAccessMangerTest.class);
   }
 
   protected void setUp() throws Exception {
     super.setUp();
-    accessManager = new AccessManagerImpl();
+
+    mockContext = mock(AccessContext.class);
+    contextAccessManager = new ContextAccessManagerImpl();
   }
 
-  public void testCheckPermission() {
-    Principal principal = new Principal("TestPrincipal");
+
+  public void testCallsModifyOnContext() {
     Permission permission = new Permission("TestPermission");
-    accessManager.addPermission(principal, permission);
+    Principal principal = new Principal("TestPrincipal");
     Set principals = new HashSet();
     principals.add(principal);
-    assertTrue("TestPrincipal has TestPermission.",
-        accessManager.checkPermission(principals, permission));
+
+    mockContext.expects(once()).method("modifyPrincipal").with(same(principals));
+
+    contextAccessManager.checkPermission(principals,
+        permission, (AccessContext)
+        mockContext.proxy());
   }
 }

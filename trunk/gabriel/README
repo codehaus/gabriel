@@ -25,3 +25,33 @@ users.
 
 Currently the application would map users to principals
 somehow.
+
+Configutation:
+
+/** Implementation
+   *
+   *  - with annotations (javadoc)
+   *  - with Permissions
+   *
+   * ... MethodStore
+   *
+   *  POST_BLOG { Blog.setName  }
+   *
+   *  ... AclStore
+   *
+   *  POST_BLOG { stephan admin }
+   *  (probably better to see which principals have a permission)
+   * 
+   *  or
+   *
+   * stephan { POST_BLOG }
+   * admin { POST_BLOG DELETE_BLOG }
+   * (probably better to see which permissions a principal has)
+   * 
+   * (or AclManager and AccessManager and CallAccessManager read
+   *  from the same file). Or one component which implements all
+   *  three Interfaces)
+   *
+   * - with Groovy
+   * - with Groovy Markup
+   */

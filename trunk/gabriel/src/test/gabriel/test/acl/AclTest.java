@@ -18,14 +18,13 @@
 
 package gabriel.test.acl;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.TestCase;
-
+import gabriel.Permission;
+import gabriel.Principal;
 import gabriel.acl.Acl;
 import gabriel.acl.AclEntry;
-import gabriel.Principal;
-import gabriel.Permission;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class AclTest extends TestCase {
   private Principal owner;
@@ -120,7 +119,7 @@ public class AclTest extends TestCase {
 
     Principal checkPrincipal = new Principal("TestPrincipal");
     Permission checkPermission = new Permission("TestPermission");
-    assertTrue("Principal has permission from entry", acl.checkPermission(checkPrincipal, checkPermission));
+    assertEquals("Principal has permission from entry", 1, acl.checkPermission(checkPrincipal, checkPermission));
   }
 
   public void testNegativePermsissionCancelsPermission() {
@@ -137,6 +136,6 @@ public class AclTest extends TestCase {
 
     Principal checkPrincipal = new Principal("TestPrincipal");
     Permission checkPermission = new Permission("TestPermission");
-    assertTrue("Principal does not have permission because of negative entry", ! acl.checkPermission(checkPrincipal, checkPermission));
+    assertEquals("Principal does not have permission because of negative entry", -1, acl.checkPermission(checkPrincipal, checkPermission));
   }
 }

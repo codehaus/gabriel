@@ -19,24 +19,30 @@
 package gabriel;
 
 /**
- * Principal
- *
+ * Principal.
+ * <p/>
  * If we use flat principals without sub-groups, perhaps call
- * this Role
+ * this Role.
  *
  * @author Stephan J. Schmidt
- * @version $Id: Principal.java,v 1.1.1.1 2004-06-16 07:56:38 stephan Exp $
+ * @version $Id: Principal.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
  */
 
 public class Principal {
+
   private String name;
 
+  /**
+   * Creates a principal with a name.
+   *
+   * @param name Name of the principal
+   */
   public Principal(String name) {
     this.name = name;
   }
 
   /**
-   * Return name of the principal
+   * Return name of the principal.
    *
    * @return Name of the principal
    */

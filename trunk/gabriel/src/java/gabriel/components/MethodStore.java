@@ -1,8 +1,8 @@
 /*
- *      Copyright 2001-2004 Fraunhofer Gesellschaft, Munich, Germany, for its
+ *      Copyright 2001-2004 Fraunhofer Gesellschaft, Munich, Germany, for its 
  *      Fraunhofer Institute Computer Architecture and Software Technology
  *      (FIRST), Berlin, Germany
- *
+ *      
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -19,10 +19,10 @@
 package gabriel.components;
 
 /**
- * AclManager manages Acl lists like creating, removing and persistent storage.
+ * Reads method mappings from a store.
  *
- * @author Stephan J. Schmidt
- * @version $Id: AclManager.java,v 1.1.1.1 2004-06-16 07:56:38 stephan Exp $
+ * @author stephan
+ * @version $id$
  */
-public interface AclManager {
+public interface MethodStore {
 }

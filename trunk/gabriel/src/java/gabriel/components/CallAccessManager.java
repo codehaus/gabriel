@@ -19,41 +19,61 @@
 package gabriel.components;
 
 import gabriel.Permission;
-import gabriel.Principal;
 
 import java.util.List;
 import java.util.Set;
 
 /**
  * CallAccessManager checks if a client is allowed to execute a method
- * by mapping method names to permissions
+ * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: CallAccessManager.java,v 1.1.1.1 2004-06-16 07:56:38 stephan Exp $
+ * @version $Id: CallAccessManager.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
  */
 public interface CallAccessManager {
 
   /**
    * Add a list of method names for a permission.
-   * Method names should follow "class.methodName"
+   * Method names should follow "class.methodName".
    *
-   * @param permission Permission which is needed to execute method
+   * @param permission  Permission which is needed to execute method
    * @param methodNames Names of methods with access restrictions
    */
   public void addMethods(Permission permission, List methodNames);
 
   /**
+   * Add a method for a permission. The method is specified
+   * by a class and the method name.
+   * <p/>
+   * Example: addMethod(new Permission("POST"), Blog.class, "post");
+   *
+   * @param permission Permission which is needed to execute method
+   * @param klass      Class with the method
+   * @param method     Name of the method to restirct access to
+   */
+  public void addMethod(Permission permission, Class klass, String method);
+
+  /**
+   * Add a method for a permission.
+   * Method names should follow "class.methodName"
+   *
+   * @param permission Permission which is needed to execute method
+   * @param methodName Name of method with access restrictions
+   */
+  public void addMethod(Permission permission, String methodName);
+
+  /**
    * Add an array of method names for a permission.
    * Convinience method.
    *
-   * @param permission Permission which is needed to execute method
+   * @param permission  Permission which is needed to execute method
    * @param methodNames Names of methods with access restrictions
    */
 
   public void addMethods(Permission permission, String[] methodNames);
 
   /**
-   * Get all permissions from which one is needed to execute the method
+   * Get all permissions from which one is needed to execute the method.
    *
    * @param methodName Method name to get the permission from
    * @return Set of permissions which restrict method execution
@@ -65,9 +85,22 @@ public interface CallAccessManager {
    * The principal needs one permission for the method to
    * be allowed to execute it.
    *
-   * @param principal Principal to check access to the method
+   * @param principals Set of principals to check access to the method
    * @param methodName Name of the method to check
    * @return true if principal is allowed to execute the method
    */
-  public boolean checkPermission(Principal principal, String methodName);
+  public boolean checkPermission(Set principals, String methodName);
+
+  /**
+   * Check if a principal can execute a method.
+   * The principal needs one permission for the method to
+   * be allowed to execute it.
+   *
+   * @param principals Set of principals to check access to the method
+   * @param klass      Class with the method
+   * @param method     Name of the method to check
+   * @return true if principal is allowed to execute the method
+   */
+  public boolean checkPermission(Set principals, Class klass, String method);
+
 }
