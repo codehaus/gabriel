@@ -22,15 +22,17 @@ import gabriel.Permission;
 
 import java.util.*;
 
+import org.picocontainer.Startable;
+
 /**
  * MethodAccessManager checks if a client is allowed to execute a method
  * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: MethodAccessManagerImpl.java,v 1.3 2004-06-24 14:48:40 stephan Exp $
+ * @version $Id: MethodAccessManagerImpl.java,v 1.4 2004-07-08 08:07:26 stephan Exp $
  */
 
-public class MethodAccessManagerImpl implements MethodAccessManager {
+public class MethodAccessManagerImpl implements MethodAccessManager, Startable {
   private AccessManager accessManager;
   private MethodStore store;
   private Map methodMap;
@@ -44,7 +46,29 @@ public class MethodAccessManagerImpl implements MethodAccessManager {
   public MethodAccessManagerImpl(AccessManager accessManager, MethodStore store) {
     this.store = store;
     this.accessManager = accessManager;
-    methodMap = this.store.getMap();
+  }
+
+  /**
+   * Return the name of the default map.
+   *
+   * @return the name of the default map
+   */
+  protected String getDefaultMapName() {
+    return "methods";
+  }
+
+  /**
+   * Start the MethodAccessManager and load the method mapping.
+   */
+  public void start() {
+    methodMap = store.getMap(getDefaultMapName());
+  }
+
+  /**
+   * Stop the MethodAccessmanager and store the possibly changed method mapping.
+   */
+  public void stop() {
+    store.putMap(getDefaultMapName(), methodMap);
   }
 
   /**

@@ -30,7 +30,7 @@ import java.util.Set;
  * be modified by context.
  * 
  * @author Stephan J. Schmidt
- * @version $Id: ContextMethodAccessManagerImpl.java,v 1.1 2004-06-24 12:37:49 stephan Exp $
+ * @version $Id: ContextMethodAccessManagerImpl.java,v 1.2 2004-07-08 08:07:26 stephan Exp $
  */
 
 public class ContextMethodAccessManagerImpl
@@ -61,6 +61,20 @@ public class ContextMethodAccessManagerImpl
   public boolean checkPermission(Set principals, String methodName, AccessContext context) {
     principals = context.modifyPrincipals(principals);
     return checkPermission(principals, methodName);
+  }
+
+  /**
+   * Delegate
+   */
+  public void start() {
+    methodAccessManager.start();
+  }
+
+  /**
+   * Delegate
+   */
+  public void stop() {
+    methodAccessManager.stop();
   }
 
   /**

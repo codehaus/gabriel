@@ -1,3 +1,15 @@
+1.0-alpha-2
+
+- added Startable to AcessManagers
+- added put() to stores
+- refactored parsers from file storages into own classes
+
+1.0-alpha-1
+
+- first codehaus release
+- added subjects which store several principals and are thread local
+
 0.1 - 10.06.2004
-- Initial Release
-- Applied to Codehaus
+
+- initial release
+- applied for codehaus project

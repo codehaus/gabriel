@@ -33,5 +33,6 @@ public interface MethodStore {
    *
    * @return Method map
    */
-  public Map getMap();
+  public Map getMap(String name);
+  public void putMap(String name, Map map);
 }
