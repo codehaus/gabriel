@@ -20,16 +20,18 @@ package gabriel.test.components;
 
 import gabriel.Permission;
 import gabriel.Principal;
+import gabriel.acl.Acl;
 import gabriel.components.AccessManager;
 import gabriel.components.AccessManagerImpl;
+import gabriel.components.AclStore;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jmock.core.MockObjectSupportTestCase;
+import org.jmock.MockObjectTestCase;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class AccessManagerTest extends MockObjectSupportTestCase {
+public class AccessManagerTest extends MockObjectTestCase {
   private AccessManager accessManager;
 
   public static Test suite() {
@@ -38,7 +40,11 @@ public class AccessManagerTest extends MockObjectSupportTestCase {
 
   protected void setUp() throws Exception {
     super.setUp();
-    accessManager = new AccessManagerImpl();
+    accessManager = new AccessManagerImpl(new AclStore() {
+      public Acl getAcl(Principal owner, String name) {
+        return new Acl(owner, name);
+      }
+    });
   }
 
   public void testCheckPermission() {

@@ -24,7 +24,10 @@ import gabriel.acl.Acl;
 import gabriel.acl.AclEntry;
 import gabriel.components.AclStore;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -42,8 +45,8 @@ public class FileAclStore implements AclStore {
   public Acl getAcl(Principal owner, String name) {
     Reader input = null;
     try {
-      input = new FileReader(name + ".acl");
-    } catch (FileNotFoundException e) {
+      input = new InputStreamReader(FileAclStore.class.getResourceAsStream("/" + name + ".acl"));
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return parse(owner, name, input);
@@ -51,7 +54,6 @@ public class FileAclStore implements AclStore {
 
   /**
    * Parse an Acl description. Needs to throw an exception.
-   * <p/>
    * <code>
    * Principal { Permission Permission }
    * Principal { Permission }

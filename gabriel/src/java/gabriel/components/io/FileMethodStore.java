@@ -21,7 +21,10 @@ package gabriel.components.io;
 import gabriel.Permission;
 import gabriel.components.MethodStore;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.*;
 
 /**
@@ -41,8 +44,9 @@ public class FileMethodStore implements MethodStore {
    */
   public Map getMap() {
     try {
-      return parse(new FileReader("methods.acl"));
-    } catch (FileNotFoundException e) {
+      Reader reader = new InputStreamReader(FileMethodStore.class.getResourceAsStream("/methods.acl"));
+      return parse(reader);
+    } catch (Exception e) {
       e.printStackTrace();
     }
     return null;

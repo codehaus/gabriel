@@ -23,19 +23,18 @@ import gabriel.Principal;
 import gabriel.components.AccessManager;
 import gabriel.components.MethodAccessManager;
 import gabriel.components.MethodAccessManagerImpl;
+import gabriel.components.MethodStore;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class CallAccessManagerTest extends MockObjectTestCase {
   private MethodAccessManager callManager;
   private Mock mockAccessManager;
+  private Mock mockMethodStore;
 
   public static Test suite() {
     return new TestSuite(AccessManagerTest.class);
@@ -45,15 +44,19 @@ public class CallAccessManagerTest extends MockObjectTestCase {
     super.setUp();
 
     mockAccessManager = mock(AccessManager.class);
-    callManager = new MethodAccessManagerImpl((AccessManager) mockAccessManager.proxy());
+    mockMethodStore = mock(MethodStore.class);
+    callManager = new MethodAccessManagerImpl((AccessManager) mockAccessManager.proxy(),
+        (MethodStore) mockMethodStore.proxy());
   }
 
   public void testCheckPermission() {
+
     Permission permission = new Permission("TestPermission");
     Principal principal = new Principal("TestPrincipal");
     Set principals = new HashSet();
     principals.add(principal);
     mockAccessManager.expects(once()).method("checkPermission").with(same(principals), same(permission)).will(returnValue(true));
+    mockMethodStore.expects(once()).method("getMap").will(returnValue(new HashMap()));
     callManager.addMethods(permission, new String[]{"TestClass.method1"});
     assertTrue("Granted permission to call TestClass.method1.", callManager.checkPermission(principals, "TestClass.method1"));
   }

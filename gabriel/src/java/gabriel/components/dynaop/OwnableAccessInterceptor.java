@@ -22,16 +22,16 @@ import dynaop.Interceptor;
 import dynaop.Invocation;
 import gabriel.Subject;
 import gabriel.components.context.AccessContext;
-import gabriel.components.context.ContextCallAccessManager;
+import gabriel.components.context.ContextMethodAccessManager;
 import gabriel.components.context.Ownable;
 import gabriel.components.context.OwnerAccessContext;
 
 import java.util.Set;
 
 public class OwnableAccessInterceptor implements Interceptor {
-  private ContextCallAccessManager manager;
+  private ContextMethodAccessManager manager;
 
-  public OwnableAccessInterceptor(ContextCallAccessManager manager) {
+  public OwnableAccessInterceptor(ContextMethodAccessManager manager) {
     super();
     this.manager = manager;
   }

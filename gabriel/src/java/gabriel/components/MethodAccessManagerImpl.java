@@ -27,11 +27,12 @@ import java.util.*;
  * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: MethodAccessManagerImpl.java,v 1.1 2004-06-24 10:22:44 stephan Exp $
+ * @version $Id: MethodAccessManagerImpl.java,v 1.2 2004-06-24 12:37:49 stephan Exp $
  */
 
 public class MethodAccessManagerImpl implements MethodAccessManager {
   private AccessManager accessManager;
+  private MethodStore store;
   private Map methodMap;
 
   /**
@@ -40,9 +41,10 @@ public class MethodAccessManagerImpl implements MethodAccessManager {
    * @param accessManager AccessManager to use for permission checking
    */
 
-  public MethodAccessManagerImpl(AccessManager accessManager) {
+  public MethodAccessManagerImpl(AccessManager accessManager, MethodStore store) {
+    this.store = store;
     this.accessManager = accessManager;
-    methodMap = new HashMap();
+    methodMap = this.store.getMap();
   }
 
   /**
