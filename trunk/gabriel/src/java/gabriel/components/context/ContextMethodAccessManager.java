@@ -28,9 +28,9 @@ import java.util.Set;
  * be modified by context.
  *
  * @author Stephan J. Schmidt
- * @version $Id: ContextCallAccessManager.java,v 1.2 2004-06-24 10:22:44 stephan Exp $
+ * @version $Id: ContextMethodAccessManager.java,v 1.1 2004-06-24 12:37:49 stephan Exp $
  */
-public interface ContextCallAccessManager extends MethodAccessManager {
+public interface ContextMethodAccessManager extends MethodAccessManager {
   /**
    * Check if a principal can execute a method.
    * The principal needs one permission for the method to

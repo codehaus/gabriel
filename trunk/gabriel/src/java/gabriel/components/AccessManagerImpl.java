@@ -34,19 +34,22 @@ import java.util.Set;
  * to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AccessManagerImpl.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: AccessManagerImpl.java,v 1.3 2004-06-24 12:37:49 stephan Exp $
  */
 public class AccessManagerImpl implements AccessManager {
   private Acl acl;
   private Principal owner;
+  private AclStore store;
 
   /**
    * Default constructor. Probably should manage several
    * ACL lists by name with one default list "Default".
    */
-  public AccessManagerImpl() {
+  public AccessManagerImpl(AclStore store) {
+    this.store = store;
+
     owner = new Principal("owner");
-    acl = new Acl(owner, "Access");
+    acl = store.getAcl(owner, "access");
   }
 
   /**

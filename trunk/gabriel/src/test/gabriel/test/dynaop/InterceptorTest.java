@@ -25,7 +25,7 @@ import dynaop.util.Closure;
 import gabriel.Principal;
 import gabriel.Subject;
 import gabriel.components.MethodAccessManager;
-import gabriel.components.context.ContextCallAccessManager;
+import gabriel.components.context.ContextMethodAccessManager;
 import gabriel.components.dynaop.AccessInterceptor;
 import gabriel.components.dynaop.OwnableAccessInterceptor;
 import junit.framework.Test;
@@ -53,7 +53,7 @@ public class InterceptorTest extends MockObjectTestCase {
 
   protected void setUp() throws Exception {
     super.setUp();
-    this.contextCallAccessManager = mock(ContextCallAccessManager.class);
+    this.contextCallAccessManager = mock(ContextMethodAccessManager.class);
     this.callAccessManager = mock(MethodAccessManager.class);
 
     principals = new HashSet();
@@ -69,7 +69,7 @@ public class InterceptorTest extends MockObjectTestCase {
 
     aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
         Pointcuts.ALL_METHODS,
-        new OwnableAccessInterceptor((ContextCallAccessManager) contextCallAccessManager.proxy()));
+        new OwnableAccessInterceptor((ContextMethodAccessManager) contextCallAccessManager.proxy()));
 
     aspects.mixin(Pointcuts.instancesOf(SecureObject.class),
         OwnableMixin.class, new Closure() {

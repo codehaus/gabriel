@@ -18,9 +18,10 @@
 
 package gabriel.components.context;
 
-import gabriel.components.AccessManager;
-import gabriel.components.MethodAccessManagerImpl;
+import gabriel.Permission;
+import gabriel.components.MethodAccessManager;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -29,20 +30,21 @@ import java.util.Set;
  * be modified by context.
  * 
  * @author Stephan J. Schmidt
- * @version $Id: ContextCallAccessManagerImpl.java,v 1.2 2004-06-24 10:22:44 stephan Exp $
+ * @version $Id: ContextMethodAccessManagerImpl.java,v 1.1 2004-06-24 12:37:49 stephan Exp $
  */
 
-public class ContextCallAccessManagerImpl
-    extends MethodAccessManagerImpl
-    implements ContextCallAccessManager {
+public class ContextMethodAccessManagerImpl
+    implements ContextMethodAccessManager {
+
+  private MethodAccessManager methodAccessManager;
 
   /**
    * Constructor with IoC dependency on AccessManager.
    *
-   * @param accessManager AccessManager which is used to check permissions for principals
+   * @param methodAccessManager AccessManager which is used to check permissions for principals
    */
-  public ContextCallAccessManagerImpl(AccessManager accessManager) {
-    super(accessManager);
+  public ContextMethodAccessManagerImpl(MethodAccessManager methodAccessManager) {
+    this.methodAccessManager = methodAccessManager;
   }
 
   /**
@@ -59,5 +61,54 @@ public class ContextCallAccessManagerImpl
   public boolean checkPermission(Set principals, String methodName, AccessContext context) {
     principals = context.modifyPrincipals(principals);
     return checkPermission(principals, methodName);
+  }
+
+  /**
+   * Delegate
+   */
+  public void addMethods(Permission permission, List methodNames) {
+    methodAccessManager.addMethods(permission, methodNames);
+  }
+
+  /**
+   * Delegate
+   */
+  public void addMethod(Permission permission, Class klass, String method) {
+    methodAccessManager.addMethod(permission, klass, method);
+  }
+
+  /**
+   * Delegate
+   */
+  public void addMethod(Permission permission, String methodName) {
+    methodAccessManager.addMethod(permission, methodName);
+  }
+
+  /**
+   * Delegate
+   */
+  public void addMethods(Permission permission, String[] methodNames) {
+    methodAccessManager.addMethods(permission, methodNames);
+  }
+
+  /**
+   * Delegate
+   */
+  public Set getPermissions(String methodName) {
+    return methodAccessManager.getPermissions(methodName);
+  }
+
+  /**
+   * Delegate
+   */
+  public boolean checkPermission(Set principals, String methodName) {
+    return methodAccessManager.checkPermission(principals, methodName);
+  }
+
+  /**
+   * Delegate
+   */
+  public boolean checkPermission(Set principals, Class klass, String method) {
+    return methodAccessManager.checkPermission(principals, klass, method);
   }
 }
