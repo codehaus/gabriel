@@ -57,6 +57,7 @@ public class ProtectMethods {
     ProxyFactory proxyFactory = ProxyFactory.getInstance(aspects);
 
 
+    System.out.println("Setting our principal to \"We\" and empty principals.");
     Subject subject = new Subject("We");
     Set principals = new HashSet();
     subject.setPrincipals(principals);
@@ -64,18 +65,23 @@ public class ProtectMethods {
 
     // We create an object which has protected methods
     SecureObject object = (SecureObject) proxyFactory.wrap(new SecureObjectImpl("Dont change me!"));
-    System.out.println(object.getName());
+    System.out.print("We try to call setName() on \""+object.getName()+"\" ... ");
     try {
       object.setName("Changed!");
     } catch (Exception e) {
-      System.out.println("Access denied for us to call setName()");
+      System.out.println("denied.");
     }
+    System.out.println("object.name = " + object.getName());
 
+    System.out.println("Adding \"ExampleUser\" to our principals.");
     // We are now member of group "ExampleUser
     principals.add(new Principal("ExampleUser"));
     // We have to set the principals again as they are copied not referenced
     // inside subject.
     subject.setPrincipals(principals);
-    object.setName("Changed!");
+    System.out.print("We try to call setName() on \""+object.getName()+"\" ... ");
+    object.setName("changed!");
+    System.out.println("changed.");
+    System.out.println("object.name = " + object.getName());
   }
 }
