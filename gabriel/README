@@ -1,3 +1,19 @@
+1. Example
+------------
+
+> ant test
+
+and
+
+> ant example
+
+work.
+
+The example is calles ProtectMethods.java
+
+2. Overview
+--------------
+
 The framework has 3 parts:
 
 1.) ACL core framework for matching principals to permissions
@@ -25,6 +41,9 @@ users.
 
 Currently the application would map users to principals
 somehow.
+
+3. Thoughts for configurations
+-------------------------------
 
 Configutation:
 
