@@ -20,6 +20,7 @@ package gabriel.test.components.context;
 
 import gabriel.Permission;
 import gabriel.Principal;
+import gabriel.components.AccessManager;
 import gabriel.components.context.AccessContext;
 import gabriel.components.context.ContextAccessManager;
 import gabriel.components.context.ContextAccessManagerImpl;
@@ -33,6 +34,7 @@ import java.util.Set;
 
 public class ContextAccessMangerTest extends MockObjectTestCase {
   private Mock mockContext;
+  private Mock accessManager;
   private ContextAccessManager contextAccessManager;
 
   public static Test suite() {
@@ -43,7 +45,8 @@ public class ContextAccessMangerTest extends MockObjectTestCase {
     super.setUp();
 
     mockContext = mock(AccessContext.class);
-    contextAccessManager = new ContextAccessManagerImpl();
+    accessManager = mock(AccessManager.class);
+    contextAccessManager = new ContextAccessManagerImpl((AccessManager) accessManager.proxy());
   }
 
 
@@ -55,6 +58,7 @@ public class ContextAccessMangerTest extends MockObjectTestCase {
 
     mockContext.expects(once()).method("modifyPrincipal").with(same(principals));
 
+    accessManager.expects(once()).method("checkPermission").will(returnValue(true));
     contextAccessManager.checkPermission(principals,
         permission, (AccessContext)
         mockContext.proxy());

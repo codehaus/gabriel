@@ -21,8 +21,8 @@ package gabriel.test.components;
 import gabriel.Permission;
 import gabriel.Principal;
 import gabriel.components.AccessManager;
-import gabriel.components.CallAccessManager;
-import gabriel.components.CallAccessManagerImpl;
+import gabriel.components.MethodAccessManager;
+import gabriel.components.MethodAccessManagerImpl;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.Mock;
@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Set;
 
 public class CallAccessManagerTest extends MockObjectTestCase {
-  private CallAccessManager callManager;
+  private MethodAccessManager callManager;
   private Mock mockAccessManager;
 
   public static Test suite() {
@@ -45,7 +45,7 @@ public class CallAccessManagerTest extends MockObjectTestCase {
     super.setUp();
 
     mockAccessManager = mock(AccessManager.class);
-    callManager = new CallAccessManagerImpl((AccessManager) mockAccessManager.proxy());
+    callManager = new MethodAccessManagerImpl((AccessManager) mockAccessManager.proxy());
   }
 
   public void testCheckPermission() {

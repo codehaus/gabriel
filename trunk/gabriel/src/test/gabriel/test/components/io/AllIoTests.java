@@ -1,8 +1,8 @@
 /*
- *      Copyright 2001-2004 Fraunhofer Gesellschaft, Munich, Germany, for its 
+ *      Copyright 2001-2004 Fraunhofer Gesellschaft, Munich, Germany, for its
  *      Fraunhofer Institute Computer Architecture and Software Technology
  *      (FIRST), Berlin, Germany
- *      
+ *
  *  Licensed under the Apache License, Version 2.0 (the "License");
  *  you may not use this file except in compliance with the License.
  *  You may obtain a copy of the License at
@@ -16,22 +16,16 @@
  *  limitations under the License.
  */
 
-package gabriel.components;
+package gabriel.test.components.io;
 
-import java.util.Map;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
-/**
- * Reads method mappings from a store.
- *
- * @author stephan
- * @version $id$
- */
-public interface MethodStore {
-  /**
-   * Get the method map with the permissions
-   * to methods mappings.
-   *
-   * @return Method map
-   */
-  public Map getMap();
+public class AllIoTests extends TestCase {
+  public static Test suite() {
+    TestSuite s = new TestSuite();
+    s.addTest(FileMethodStoreTest.suite());
+    return s;
+  }
 }

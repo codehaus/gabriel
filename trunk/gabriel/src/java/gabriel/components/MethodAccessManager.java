@@ -24,13 +24,13 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * CallAccessManager checks if a client is allowed to execute a method
+ * MethodAccessManager checks if a client is allowed to execute a method
  * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: CallAccessManager.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: MethodAccessManager.java,v 1.1 2004-06-24 10:22:44 stephan Exp $
  */
-public interface CallAccessManager {
+public interface MethodAccessManager {
 
   /**
    * Add a list of method names for a permission.
