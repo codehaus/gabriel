@@ -55,13 +55,21 @@ public class AccessInterceptor implements Interceptor {
   }
 
   public Object intercept(Invocation invocation) throws Throwable {
-    Principal principal = (Principal) invocation.getArguments()[0];
-
-    if (checkPermission(principal, invocation.getMethod().getDeclaringClass().getName(), invocation.getMethod().getName())) {
-      invocation.proceed();
+    Object result = null;
+    if (! invocation.getMethod().getName().equals("setOwner") && invocation.getArguments() != null) {
+      Object first = invocation.getArguments()[0];
+      if (first instanceof Principal) {
+        Principal principal = (Principal) first;
+        if (checkPermission(principal, invocation.getMethod().getDeclaringClass().getName(), invocation.getMethod().getName())) {
+          result = invocation.proceed();
+        } else {
+          throw new SecurityException("Access denied to "+invocation.getMethod().getName() + " for "+principal.getName());
+        }
+      }
     } else {
-      throw new SecurityException("Access denied to "+invocation.getMethod().getName() + " for "+principal.getName());
+      result = invocation.proceed();
     }
-    return null;
+
+    return result;
   }
 }

@@ -2,7 +2,7 @@
 
 <!--
   ** @author Stephan J. Schmidt
-  ** @version $Id: build.xml,v 1.1.1.1 2004-06-16 07:56:33 stephan Exp $
+  ** @version $Id: build.xml,v 1.2 2004-06-16 08:47:35 stephan Exp $
   -->
 <project basedir="." default="compile" name="Gabriel">
 
@@ -13,6 +13,8 @@
     <pathelement location="${lib}/jmock-1.0.0.jar"/>
     <pathelement location="${lib}/dynaop-1.0-beta.jar"/>
     <pathelement location="${lib}/cglib-asm-1.0.jar"/>
+    <pathelement location="${lib}/picocontainer-1.0.jar"/>
+    <pathelement location="${lib}/nanocontainer-dynaop-1.0-beta-1-SNAPSHOT.jar"/>
     <!-- <pathelement location="${lib}/jakarta-oro-2.0.7.jar"/> -->
     <!-- <pathelement location="${lib}/bsh-2.0b1.jar"/> -->
   </path>

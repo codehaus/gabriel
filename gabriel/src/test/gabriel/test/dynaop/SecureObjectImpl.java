@@ -23,7 +23,12 @@ import gabriel.Principal;
 public class SecureObjectImpl implements SecureObject {
   private String name;
 
+  public SecureObjectImpl() {
+    this.name = "Empty";
+  }
+
   public SecureObjectImpl(String name) {
+    this();
     this.name = name;
   }
 
