@@ -18,12 +18,21 @@
 
 package gabriel.components.context;
 
+import java.util.List;
+
 
 /**
  * Stores the context for access checks
  *
  * @author Stephan J. Schmidt
- * @version $Id: AccessContext.java,v 1.1 2004-06-18 08:39:40 stephan Exp $
+ * @version $Id: AccessContext.java,v 1.2 2004-06-18 11:29:41 stephan Exp $
  */
 public interface AccessContext {
+    /**
+     * Modify the list of principals depending on the context
+     *
+     * @param principals Original principal list
+     * @return modified principal list
+     */
+    public List modifyPrincipal(List principals);
 }
