@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ** @author Stephan J. Schmidt
+  ** @version $Id: build.xml,v 1.1.1.1 2004-06-16 07:56:33 stephan Exp $
+  -->
+<project basedir="." default="compile" name="Gabriel">
+
+  <property file="conf/build.properties"/>
+
+  <path id="test.classpath">
+    <pathelement location="${lib}/junit-3.8.1.jar"/>
+    <pathelement location="${lib}/jmock-1.0.0.jar"/>
+    <pathelement location="${lib}/dynaop-1.0-beta.jar"/>
+    <pathelement location="${lib}/cglib-asm-1.0.jar"/>
+    <!-- <pathelement location="${lib}/jakarta-oro-2.0.7.jar"/> -->
+    <!-- <pathelement location="${lib}/bsh-2.0b1.jar"/> -->
+  </path>
+
+  <path id="classpath">
+    <path refid="test.classpath"/>
+  </path>
+
+   <target name="prepare">
+      <mkdir dir="${jar}"/>
+      <mkdir dir="${out}"/>
+   </target>
+
+   <target name="compile" depends="prepare">
+     <javac srcdir="${src}/java" destdir="${out}" classpathref="classpath" debug="${debug}"/>
+   </target>
+
+  <target name="compile-test" depends="prepare">
+     <javac srcdir="${src}/test" destdir="${out}" classpathref="classpath" debug="${debug}">
+        <include name="gabriel/test/**"/>
+     </javac>
+  </target>
+
+  <target name="test" depends="jar" description="run compliance tests">
+    <junit printsummary="true">
+       <formatter usefile="false" type="plain"/>
+       <test name="${appname}.test.${testTarget}"/>
+       <classpath refid="classpath"/>
+       <classpath location="${jar}/${appname}.jar"/>
+    </junit>
+  </target>
+
+  <target name="jar" depends="compile, compile-test" description="build ${appname}.jar" >
+    <jar destfile="${jar}/${appname}.jar" excludes="**/CVS"
+      manifest="${conf}/META-INF/manifest.${appname}">
+      <fileset dir="${out}/" includes="**"/>
+      <fileset dir="${src}" includes="META-INF/**"/>
+      <fileset dir="." includes="conf/**"/>
+      <fileset dir="${src}" includes="*.properties"/>
+      <fileset dir="${conf}/" includes="*.properties"/>
+      <fileset dir="${conf}/" includes="*.bsh"/>
+    </jar>
+  </target>
+
+  <target name="dist" depends="clean, test, jar">
+   <delete failonerror="false" includeEmptyDirs="true">
+      <fileset dir="${out}" includes="**"/>
+   </delete>
+    <tar destfile="../${appname}-${version}-${status}-src.tgz" compression="gzip">
+      <tarfileset dir="." prefix="${appname}-${version}-${status}" mode="700">
+        <include name="Changes.txt"/>
+        <include name="conf/**"/>
+        <include name="docs/**"/>
+        <include name="src/**"/>
+        <include name="licenses/**"/>
+        <include name="README"/>
+        <include name="NOTICE"/>
+        <include name="LICENSE.txt"/>
+        <include name="build.xml"/>
+        <include name="lib/**"/>
+      </tarfileset>
+    </tar>
+  </target>
+
+  <target description="clean up compiled code" name="clean">
+    <delete failonerror="false">
+      <fileset dir="${out}" includes="**" excludes="CVS"/>
+    </delete>
+    <delete failonerror="false">
+      <fileset dir="${jar}" includes="${appname}-${version}${status}.jar"/>
+    </delete>
+  </target>
+
+ <target description="generation javadocs" name="javadoc">
+  <javadoc packagenames="gabriel.*"
+           sourcepath="src/java"
+           excludepackagenames="gabriel.test.*"
+           defaultexcludes="yes"
+           destdir="docs/api"
+           author="true"
+           version="true"
+           use="true"
+           windowtitle="Gabriel Access Framework">
+    <doctitle><![CDATA[<h1>Radeox</h1>]]></doctitle>
+    <bottom><![CDATA[<i>Copyright &#169; 2003 Matthias L. Jugel, Stephan J. Schmidt. All Rights Reserved
+.</i>]]></bottom>
+<!--    <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/> -->
+  </javadoc>
+</target>
+</project>
