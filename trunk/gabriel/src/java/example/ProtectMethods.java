@@ -30,7 +30,6 @@ import gabriel.components.io.FileMethodStore;
 
 import java.util.HashSet;
 import java.util.Set;
-
 /**
  * Shows how to protect the methods of an object.
  *
@@ -56,8 +55,7 @@ public class ProtectMethods {
 
     ProxyFactory proxyFactory = ProxyFactory.getInstance(aspects);
 
-
-    System.out.println("Setting our principal to \"We\" and empty principals.");
+    System.out.println("Setting our subject to \"We\" with empty principals.");
     Subject subject = new Subject("We");
     Set principals = new HashSet();
     subject.setPrincipals(principals);
