@@ -19,17 +19,16 @@
 package gabriel.components;
 
 import gabriel.Permission;
+import org.picocontainer.Startable;
 
 import java.util.*;
-
-import org.picocontainer.Startable;
 
 /**
  * MethodAccessManager checks if a client is allowed to execute a method
  * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: MethodAccessManagerImpl.java,v 1.4 2004-07-08 08:07:26 stephan Exp $
+ * @version $Id: MethodAccessManagerImpl.java,v 1.5 2004-07-12 12:27:33 stephan Exp $
  */
 
 public class MethodAccessManagerImpl implements MethodAccessManager, Startable {
@@ -153,6 +152,8 @@ public class MethodAccessManagerImpl implements MethodAccessManager, Startable {
    * @return true if principal is allowed to execute the method
    */
   public boolean checkPermission(Set principals, String methodName) {
+    if (null == principals) return false;
+
     // get all Permissions for methodName
     // check all Permissions with accessManager and principal
     if (methodMap.containsKey(methodName)) {

@@ -32,7 +32,6 @@ public class AllComponentsTests extends TestCase {
     s.addTest(AllContextTests.suite());
     s.addTest(AccessManagerTest.suite());
     s.addTest(CallAccessManagerTest.suite());
-    s.addTest(AclStoreTest.suite());
     s.addTest(AllIoTests.suite());
     s.addTest(AllParserTests.suite());
     return s;

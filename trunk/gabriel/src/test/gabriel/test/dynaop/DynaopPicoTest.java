@@ -52,8 +52,10 @@ public class DynaopPicoTest extends MockObjectTestCase {
         Pointcuts.ALL_METHODS, new AccessInterceptor((MethodAccessManager) callAccessManager.proxy()));
     aspects.mixin(Pointcuts.instancesOf(SecureObject.class),
         OwnableMixin.class, new Closure() {
+///CLOVER:OFF
           public void execute(Object o) {
           }
+///CLOVER:ON
         });
 
     callAccessManager.expects(atLeastOnce()).method("checkPermission").will(returnValue(false));
@@ -66,7 +68,9 @@ public class DynaopPicoTest extends MockObjectTestCase {
 
     try {
       object.setName("NewTestName");
+///CLOVER:OFF
       fail("Access should be denied to method setName() for NotAllowedPrincipal");
+///CLOVER:ON
     } catch (SecurityException e) {
       // System.out.println(e.getMessage());
     }

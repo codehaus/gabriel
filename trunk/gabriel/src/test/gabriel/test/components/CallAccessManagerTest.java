@@ -37,7 +37,7 @@ public class CallAccessManagerTest extends MockObjectTestCase {
   private Mock mockMethodStore;
 
   public static Test suite() {
-    return new TestSuite(AccessManagerTest.class);
+    return new TestSuite(CallAccessManagerTest.class);
   }
 
   protected void setUp() throws Exception {
@@ -47,16 +47,37 @@ public class CallAccessManagerTest extends MockObjectTestCase {
     mockMethodStore = mock(MethodStore.class);
     callManager = new MethodAccessManagerImpl((AccessManager) mockAccessManager.proxy(),
         (MethodStore) mockMethodStore.proxy());
+    mockMethodStore.expects(once()).method("getMap").will(returnValue(new HashMap()));
+    callManager.start();
   }
 
-  public void testCheckPermission() {
+  public void testNonExistingMethod() {
+    assertTrue("Call on non existing method return empty set", callManager.getPermissions("method1").isEmpty());
+  }
 
+  public void testCheckPermissionOnNonExistingMethod() {
+    Principal principal = new Principal("TestPrincipal");
+    Set principals = new HashSet();
+    principals.add(principal);
+    assertTrue("Call check on non existing method returns true", callManager.checkPermission(principals, "method1"));
+  }
+
+  public void testCheckPermissionWithClass() {
     Permission permission = new Permission("TestPermission");
     Principal principal = new Principal("TestPrincipal");
     Set principals = new HashSet();
     principals.add(principal);
     mockAccessManager.expects(once()).method("checkPermission").with(same(principals), same(permission)).will(returnValue(true));
-    mockMethodStore.expects(once()).method("getMap").will(returnValue(new HashMap()));
+    callManager.addMethod(permission, CallAccessManagerTest.class, "method1");
+    assertTrue("Granted permission to call TestClass.method1.", callManager.checkPermission(principals, CallAccessManagerTest.class, "method1"));
+  }
+
+  public void testCheckPermission() {
+    Permission permission = new Permission("TestPermission");
+    Principal principal = new Principal("TestPrincipal");
+    Set principals = new HashSet();
+    principals.add(principal);
+    mockAccessManager.expects(once()).method("checkPermission").with(same(principals), same(permission)).will(returnValue(true));
     callManager.addMethods(permission, new String[]{"TestClass.method1"});
     assertTrue("Granted permission to call TestClass.method1.", callManager.checkPermission(principals, "TestClass.method1"));
   }
@@ -79,4 +100,24 @@ public class CallAccessManagerTest extends MockObjectTestCase {
         callManager.getPermissions("TestClass.method2").contains(new Permission("TestPermission")));
   }
 
+  public void testAddTwoPermissionForMethod() {
+    callManager.addMethod(new Permission("TestPermission1"), "TestClass.method1");
+    callManager.addMethod(new Permission("TestPermission2"), "TestClass.method1");
+
+    assertTrue("TestPermission1 is needed for method1",
+        callManager.getPermissions("TestClass.method1").contains(new Permission("TestPermission1")));
+    assertTrue("TestPermission1 is needed for method1",
+        callManager.getPermissions("TestClass.method1").contains(new Permission("TestPermission2")));
+  }
+
+  public void testAddPermissionsWithClass() {
+    callManager.addMethod(new Permission("TestPermission"), CallAccessManagerTest.class, "method1");
+    assertTrue("TestPermission is needed for method1",
+        callManager.getPermissions("gabriel.test.components.CallAccessManagerTest.method1").contains(new Permission("TestPermission")));
+  }
+
+  public void testStopStoresMap() {
+    mockMethodStore.expects(once()).method("putMap");
+    callManager.stop();
+  }
 }

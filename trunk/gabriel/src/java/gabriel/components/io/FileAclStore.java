@@ -50,7 +50,7 @@ public class FileAclStore implements AclStore {
    * @return Full name of the Acl
    */
   protected String getAclName(String name) {
-    return "/gabriel/"+name+".acl";
+    return "/gabriel/" + name + ".acl";
   }
 
   /**
@@ -62,13 +62,16 @@ public class FileAclStore implements AclStore {
    */
   public Acl getAcl(Principal owner, String name) {
     Reader input = null;
+    Acl acl = null;
     try {
       input = new InputStreamReader(FileAclStore.class.getResourceAsStream(getAclName(name)));
+      acl = parse(owner, name, input);
     } catch (Exception e) {
-      System.err.println("Cannot load file: "+getAclName(name));
+      System.err.println("Cannot load file: " + getAclName(name));
+      acl = new Acl(owner, name);
       e.printStackTrace();
     }
-    return parse(owner, name, input);
+    return acl;
   }
 
   /**

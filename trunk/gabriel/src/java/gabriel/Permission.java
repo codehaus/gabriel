@@ -22,7 +22,7 @@ package gabriel;
  * Permission grants access to the execution of actions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: Permission.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: Permission.java,v 1.3 2004-07-12 12:27:33 stephan Exp $
  */
 
 public class Permission {
@@ -72,5 +72,9 @@ public class Permission {
 
   public int hashCode() {
     return (name != null ? name.hashCode() : 0);
+  }
+
+  public String toString() {
+    return "(" + name + ")";
   }
 }

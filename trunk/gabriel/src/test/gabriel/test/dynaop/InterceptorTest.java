@@ -63,7 +63,7 @@ public class InterceptorTest extends MockObjectTestCase {
     aspects = new Aspects();
   }
 
-  public void testDenyOwnableAccessInterceptor() {
+  public void testAllowOwnableAccessInterceptor() {
 
     aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
         Pointcuts.ALL_METHODS,
@@ -71,8 +71,10 @@ public class InterceptorTest extends MockObjectTestCase {
 
     aspects.mixin(Pointcuts.instancesOf(SecureObject.class),
         OwnableMixin.class, new Closure() {
+///CLOVER:OFF
           public void execute(Object o) {
           }
+///CLOVER:ON
         });
 
     proxyFactory = ProxyFactory.getInstance(aspects);
@@ -83,18 +85,70 @@ public class InterceptorTest extends MockObjectTestCase {
         with(eq(principals),
             eq("example.SecureObject.setName"),
             ANYTHING).
+        will(returnValue(true));
+
+    SecureObject object = new SecureObjectImpl("TestName");
+    SecureObject wrapped = (SecureObject) proxyFactory.wrap(object);
+
+    wrapped.setName("NewTestName");
+    assertEquals("Name set", "NewTestName", object.getName());
+  }
+
+  public void testDenyOwnableAccessInterceptor() {
+
+    aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
+        Pointcuts.ALL_METHODS,
+        new OwnableAccessInterceptor((ContextMethodAccessManager) contextCallAccessManager.proxy()));
+
+    aspects.mixin(Pointcuts.instancesOf(SecureObject.class),
+        OwnableMixin.class, new Closure() {
+///CLOVER:OFF
+          public void execute(Object o) {
+          }
+///CLOVER:ON
+        });
+
+    contextCallAccessManager.
+        expects(once()).
+        method("checkPermission").
+        with(eq(principals),
+            eq("example.SecureObject.setName"),
+            ANYTHING).
         will(returnValue(false));
+
+    proxyFactory = ProxyFactory.getInstance(aspects);
 
     SecureObject object = new SecureObjectImpl("TestName");
     SecureObject wrapped = (SecureObject) proxyFactory.wrap(object);
 
     try {
       wrapped.setName("NewTestName");
+///CLOVER:OFF
       fail("Access should be denied to method setName() for NotAllowedPrincipal");
+///CLOVER:ON
     } catch (SecurityException e) {
       // System.out.println(e.getMessage());
     }
     assertEquals("Name not set by wrong principal.", "TestName", object.getName());
+  }
+
+  public void testAllowAccessInterceptor() {
+    callAccessManager.
+        expects(once()).
+        method("checkPermission").
+        with(eq(principals),
+            eq("example.SecureObject.setName")).
+        will(returnValue(true));
+
+    aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
+        Pointcuts.ALL_METHODS, new AccessInterceptor((MethodAccessManager) callAccessManager.proxy()));
+
+    proxyFactory = ProxyFactory.getInstance(aspects);
+
+    SecureObject object = new SecureObjectImpl("TestName");
+    SecureObject wrapped = (SecureObject) proxyFactory.wrap(object);
+    wrapped.setName("NewTestName");
+    assertEquals("Name was set", "NewTestName", object.getName());
   }
 
   public void testDenyAccessInterceptor() {
@@ -114,7 +168,9 @@ public class InterceptorTest extends MockObjectTestCase {
     SecureObject wrapped = (SecureObject) proxyFactory.wrap(object);
     try {
       wrapped.setName("NewTestName");
+///CLOVER:OFF
       fail("Access should be denied to method setName() for NotAllowedPrincipal");
+///CLOVER:ON
     } catch (SecurityException e) {
       // System.out.println(e.getMessage());
     }

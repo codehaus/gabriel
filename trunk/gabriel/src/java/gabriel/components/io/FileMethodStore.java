@@ -62,8 +62,7 @@ public class FileMethodStore implements MethodStore {
    */
   public Map getMap(String name) {
     try {
-      Reader reader = new InputStreamReader(
-          FileMethodStore.class.getResourceAsStream(getName(name)));
+      Reader reader = new InputStreamReader(FileMethodStore.class.getResourceAsStream(getName(name)));
       return parse(reader);
     } catch (Exception e) {
       e.printStackTrace();
@@ -75,7 +74,7 @@ public class FileMethodStore implements MethodStore {
     // What the f*** should I do to write to a resource?
   }
 
-  /**                S
+  /**
    * Parse a method map from a reader.
    *
    * @param in Reader with the source

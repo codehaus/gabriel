@@ -26,7 +26,7 @@ import java.util.Set;
  * principals like "Admin", "Editor", "Stephan"
  *
  * @author Stephan J. Schmidt
- * @version $Id: Subject.java,v 1.1 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: Subject.java,v 1.2 2004-07-12 12:27:33 stephan Exp $
  */
 
 public class Subject {
@@ -109,6 +109,9 @@ public class Subject {
   }
 
   public int hashCode() {
-    return name.hashCode() + principals.hashCode();
+    int result;
+    result = (name != null) ? name.hashCode() : 0;
+    result = 29 * result + ((principals != null) ? principals.hashCode() : 0);
+    return result;
   }
 }

@@ -30,7 +30,7 @@ import java.util.List;
  * be negative which will cancel the permission for a principal.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AclEntry.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: AclEntry.java,v 1.3 2004-07-12 12:27:33 stephan Exp $
  */
 
 public class AclEntry {
@@ -133,5 +133,9 @@ public class AclEntry {
    */
   public List permissions() {
     return permissions;
+  }
+
+  public String toString() {
+    return (isNegative() ? "-" : "") + "(" + principal + ": " + permissions + ")";
   }
 }

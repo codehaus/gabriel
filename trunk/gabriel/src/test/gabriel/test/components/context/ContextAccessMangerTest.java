@@ -29,6 +29,7 @@ import junit.framework.TestSuite;
 import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,8 +48,27 @@ public class ContextAccessMangerTest extends MockObjectTestCase {
     mockContext = mock(AccessContext.class);
     accessManager = mock(AccessManager.class);
     contextAccessManager = new ContextAccessManagerImpl((AccessManager) accessManager.proxy());
+    contextAccessManager.start();
   }
 
+  protected void tearDown() throws Exception {
+    contextAccessManager.stop();
+  }
+
+  public void testDelegatesAddPermission() {
+    accessManager.expects(once()).method("addPermission");
+    contextAccessManager.addPermission(new Principal("TestPermission"), new Permission("TestPermission"));
+  }
+
+  public void testDelegatesCheckPermissionWithSet() {
+    accessManager.expects(once()).method("checkPermission").will(returnValue(true));
+    contextAccessManager.checkPermission(new HashSet(), new Permission("TestPermission"));
+  }
+
+  public void testDelegatesAddPermissionWithList() {
+    accessManager.expects(once()).method("addPermission");
+    contextAccessManager.addPermission(new Principal("TestPermission"), new ArrayList());
+  }
 
   public void testCallsModifyOnContext() {
     Permission permission = new Permission("TestPermission");
@@ -56,7 +76,7 @@ public class ContextAccessMangerTest extends MockObjectTestCase {
     Set principals = new HashSet();
     principals.add(principal);
 
-    mockContext.expects(once()).method("modifyPrincipal").with(same(principals));
+    mockContext.expects(once()).method("modifyPrincipals").with(same(principals));
 
     accessManager.expects(once()).method("checkPermission").will(returnValue(true));
     contextAccessManager.checkPermission(principals,

@@ -30,7 +30,7 @@ import java.util.Set;
  * be modified by context.
  * 
  * @author Stephan J. Schmidt
- * @version $Id: ContextMethodAccessManagerImpl.java,v 1.2 2004-07-08 08:07:26 stephan Exp $
+ * @version $Id: ContextMethodAccessManagerImpl.java,v 1.3 2004-07-12 12:27:33 stephan Exp $
  */
 
 public class ContextMethodAccessManagerImpl

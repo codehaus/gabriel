@@ -19,6 +19,7 @@
 package gabriel.components.context;
 
 import gabriel.Permission;
+import gabriel.components.AccessManager;
 
 import java.util.Set;
 
@@ -27,9 +28,9 @@ import java.util.Set;
  * in a certain context.
  *
  * @author Stephan J. Schmidt
- * @version $Id: ContextAccessManager.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: ContextAccessManager.java,v 1.3 2004-07-12 12:27:33 stephan Exp $
  */
-public interface ContextAccessManager {
+public interface ContextAccessManager extends AccessManager {
   /**
    * Check if a principal posseses the permission.
    * Perhaps return int with -1,0,1 for denied,neutral,allow.
