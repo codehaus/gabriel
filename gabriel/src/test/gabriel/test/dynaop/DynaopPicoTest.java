@@ -21,7 +21,8 @@ package gabriel.test.dynaop;
 import dynaop.Aspects;
 import dynaop.Pointcuts;
 import dynaop.util.Closure;
-import gabriel.Principal;
+import example.SecureObject;
+import example.SecureObjectImpl;
 import gabriel.components.MethodAccessManager;
 import gabriel.components.dynaop.AccessInterceptor;
 import junit.framework.Test;
@@ -63,9 +64,8 @@ public class DynaopPicoTest extends MockObjectTestCase {
 
     SecureObject object = (SecureObject) container.getComponentInstance(SecureObject.class);
 
-    Principal notAllowed = new Principal("NotAllowedPrincipal");
     try {
-      object.setName(notAllowed, "NewTestName");
+      object.setName("NewTestName");
       fail("Access should be denied to method setName() for NotAllowedPrincipal");
     } catch (SecurityException e) {
       // System.out.println(e.getMessage());

@@ -22,7 +22,8 @@ import dynaop.Aspects;
 import dynaop.Pointcuts;
 import dynaop.ProxyFactory;
 import dynaop.util.Closure;
-import gabriel.Principal;
+import example.SecureObject;
+import example.SecureObjectImpl;
 import gabriel.Subject;
 import gabriel.components.MethodAccessManager;
 import gabriel.components.context.ContextMethodAccessManager;
@@ -41,7 +42,6 @@ public class InterceptorTest extends MockObjectTestCase {
   private Mock contextCallAccessManager;
   private Mock callAccessManager;
 
-  private Principal notAllowed;
   private Set principals;
 
   private Aspects aspects;
@@ -59,8 +59,6 @@ public class InterceptorTest extends MockObjectTestCase {
     principals = new HashSet();
     Subject subject = Subject.get();
     subject.setPrincipals(principals);
-
-    notAllowed = new Principal("NotAllowedPrincipal");
 
     aspects = new Aspects();
   }
@@ -83,7 +81,7 @@ public class InterceptorTest extends MockObjectTestCase {
         expects(once()).
         method("checkPermission").
         with(eq(principals),
-            eq("gabriel.test.dynaop.SecureObject.setName"),
+            eq("example.SecureObject.setName"),
             ANYTHING).
         will(returnValue(false));
 
@@ -91,7 +89,7 @@ public class InterceptorTest extends MockObjectTestCase {
     SecureObject wrapped = (SecureObject) proxyFactory.wrap(object);
 
     try {
-      wrapped.setName(notAllowed, "NewTestName");
+      wrapped.setName("NewTestName");
       fail("Access should be denied to method setName() for NotAllowedPrincipal");
     } catch (SecurityException e) {
       // System.out.println(e.getMessage());
@@ -104,7 +102,7 @@ public class InterceptorTest extends MockObjectTestCase {
         expects(once()).
         method("checkPermission").
         with(eq(principals),
-            eq("gabriel.test.dynaop.SecureObject.setName")).
+            eq("example.SecureObject.setName")).
         will(returnValue(false));
 
     aspects.interceptor(Pointcuts.instancesOf(SecureObject.class),
@@ -115,7 +113,7 @@ public class InterceptorTest extends MockObjectTestCase {
     SecureObject object = new SecureObjectImpl("TestName");
     SecureObject wrapped = (SecureObject) proxyFactory.wrap(object);
     try {
-      wrapped.setName(notAllowed, "NewTestName");
+      wrapped.setName("NewTestName");
       fail("Access should be denied to method setName() for NotAllowedPrincipal");
     } catch (SecurityException e) {
       // System.out.println(e.getMessage());

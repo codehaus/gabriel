@@ -16,15 +16,14 @@
  *  limitations under the License.
  */
 
-package gabriel.test.dynaop;
+package example;
 
-import gabriel.Principal;
 
 public class SecureObjectImpl implements SecureObject {
   private String name;
 
   public SecureObjectImpl() {
-    this.name = "Empty";
+    this.name = "NoName";
   }
 
   public SecureObjectImpl(String name) {
@@ -32,7 +31,7 @@ public class SecureObjectImpl implements SecureObject {
     this.name = name;
   }
 
-  public void setName(Principal principal, String name) {
+  public void setName(String name) {
     this.name = name;
   };
   public String getName() {

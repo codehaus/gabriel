@@ -64,8 +64,7 @@ public class FileMethodStore implements MethodStore {
 
     try {
       String line = "";
-      while (null != line) {
-        line = reader.readLine();
+      while (null != (line = reader.readLine())) {
         buffer.append(line);
         buffer.append("\n");
       }

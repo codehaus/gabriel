@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 /**
- * Stores Acl in files with <name>.txt
+ * Stores Acl in files with <name>.acl
  *
  * @author stephan
  * @version $id$
@@ -70,8 +70,7 @@ public class FileAclStore implements AclStore {
 
     try {
       String line = "";
-      while (null != line) {
-        line = reader.readLine();
+      while (null != (line = reader.readLine())) {
         buffer.append(line);
         buffer.append("\n");
       }
