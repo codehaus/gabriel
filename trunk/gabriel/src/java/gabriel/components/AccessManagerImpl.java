@@ -34,7 +34,7 @@ import java.util.Set;
  * to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AccessManagerImpl.java,v 1.3 2004-06-24 12:37:49 stephan Exp $
+ * @version $Id: AccessManagerImpl.java,v 1.4 2004-07-08 08:07:25 stephan Exp $
  */
 public class AccessManagerImpl implements AccessManager {
   private Acl acl;
@@ -49,7 +49,19 @@ public class AccessManagerImpl implements AccessManager {
     this.store = store;
 
     owner = new Principal("owner");
-    acl = store.getAcl(owner, "access");
+    acl = store.getAcl(owner, getDefaultAclName());
+  }
+
+  protected String getDefaultAclName() {
+    return "access";
+  }
+
+  public void start() {
+    // do nothing
+  }
+
+  public void stop() {
+    store.putAcl(getDefaultAclName(), acl);
   }
 
   /**

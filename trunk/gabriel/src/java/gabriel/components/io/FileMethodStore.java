@@ -42,6 +42,17 @@ public class FileMethodStore implements MethodStore {
   }
 
   /**
+   * Construct the complete name for the file
+   * which stores the mappings.
+   *
+   * @param name Name of the map
+   * @return complete name with path for the file
+   */
+  protected String getName(String name) {
+    return "/gabriel/" + name + ".acl";
+  }
+
+  /**
    * Get the method map with the permissions
    * to methods mappings.
    * <p/>
@@ -49,9 +60,10 @@ public class FileMethodStore implements MethodStore {
    *
    * @return Method map
    */
-  public Map getMap() {
+  public Map getMap(String name) {
     try {
-      Reader reader = new InputStreamReader(FileMethodStore.class.getResourceAsStream("/methods.acl"));
+      Reader reader = new InputStreamReader(
+          FileMethodStore.class.getResourceAsStream(getName(name)));
       return parse(reader);
     } catch (Exception e) {
       e.printStackTrace();
@@ -59,7 +71,11 @@ public class FileMethodStore implements MethodStore {
     return null;
   }
 
-  /**
+  public void putMap(String name, Map map) {
+    // What the f*** should I do to write to a resource?
+  }
+
+  /**                S
    * Parse a method map from a reader.
    *
    * @param in Reader with the source
@@ -82,4 +98,5 @@ public class FileMethodStore implements MethodStore {
 
     return parser.parse(input);
   }
+
 }

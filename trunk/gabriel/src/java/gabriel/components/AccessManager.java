@@ -24,13 +24,15 @@ import gabriel.Principal;
 import java.util.List;
 import java.util.Set;
 
+import org.picocontainer.Startable;
+
 /**
  * AccessManager checks for access rights with permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AccessManager.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: AccessManager.java,v 1.3 2004-07-08 08:07:25 stephan Exp $
  */
-public interface AccessManager {
+public interface AccessManager extends Startable {
   /**
    * Check if a principal posseses the permission.
    * Perhaps return int with -1,0,1 for denied,neutral,allow.

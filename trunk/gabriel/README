@@ -23,27 +23,27 @@ The framework has 3 parts:
 
 2.) Components like AccessManager to integrate ACLs with applications and store and create ACLs
 
-3.) Interceptors to protect method calls
+3.) Components and interceptors to protect method calls
 
 3 depends on 2 depends on 1
 
-Methods are mapped to permissions like
-("POST_BLOG" -> Blog.post, Blog.store)
+Methods are mapped to permissions:
+POST_BLOG { Blog.post Blog.store }
 
 This way permissions like POST_BLOG can be used to protect method calls
 and from within the GUI the permissions can be used to check 
-wether to display a "POST" button.
+whether to display a "POST" button.
 
-Principals are mapped to permissions like
-("Editor" -> "POST_BLOG", "REMOVE_POST")
+Principals are mapped to permissions:
+Editor { POST_BLOG REMOVE_POST }
 
-Users are mapped to principals, but this is outside the scope of the
-framework right now and might need another framework
-like OSUSer to map principals to users and to authenticate
-users.
+Users are mapped to principals (with subjects), but this
+is outside the scope of the framework right now and might need
+another framework like OSUSer to map principals to users and
+to authenticate users.
 
-Currently the application would map users to principals
-somehow.
+Currently the application would map users to subjects and
+principals somehow.
 
 3. Thoughts for configurations
 -------------------------------
@@ -70,9 +70,9 @@ Configutation:
    * admin { POST_BLOG DELETE_BLOG }
    * (probably better to see which permissions a principal has)
    * 
-   * (or AclManager and AccessManager and CallAccessManager read
+   * (or AclStore and MethodStore read
    *  from the same file). Or one component which implements all
-   *  three Interfaces)
+   *  interfaces)
    *
    * - with Groovy
    * - with Groovy Markup

@@ -23,14 +23,16 @@ import gabriel.Permission;
 import java.util.List;
 import java.util.Set;
 
+import org.picocontainer.Startable;
+
 /**
  * MethodAccessManager checks if a client is allowed to execute a method
  * by mapping method names to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: MethodAccessManager.java,v 1.1 2004-06-24 10:22:44 stephan Exp $
+ * @version $Id: MethodAccessManager.java,v 1.2 2004-07-08 08:07:26 stephan Exp $
  */
-public interface MethodAccessManager {
+public interface MethodAccessManager extends Startable {
 
   /**
    * Add a list of method names for a permission.

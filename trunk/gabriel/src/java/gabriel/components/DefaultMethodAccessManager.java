@@ -34,5 +34,6 @@ public class DefaultMethodAccessManager extends MethodAccessManagerImpl {
   public DefaultMethodAccessManager() {
     super(new AccessManagerImpl(new FileAclStore(new AclParser())),
         new FileMethodStore(new MethodParser()));
+    super.start();
   }
 }

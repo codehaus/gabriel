@@ -42,15 +42,43 @@ public class FileAclStore implements AclStore {
     this.parser = parser;
   }
 
-  // throws AclNotFoundException
+  /**
+   * Return the full name with path for
+   * an Acl.
+   *
+   * @param name Name of the Acl
+   * @return Full name of the Acl
+   */
+  protected String getAclName(String name) {
+    return "/gabriel/"+name+".acl";
+  }
+
+  /**
+   * Get an Acl from the store.
+   *
+   * @param owner Principal who owns the Acl
+   * @param name  Name of the Acl
+   * @return Requested Acl
+   */
   public Acl getAcl(Principal owner, String name) {
     Reader input = null;
     try {
-      input = new InputStreamReader(FileAclStore.class.getResourceAsStream("/" + name + ".acl"));
+      input = new InputStreamReader(FileAclStore.class.getResourceAsStream(getAclName(name)));
     } catch (Exception e) {
+      System.err.println("Cannot load file: "+getAclName(name));
       e.printStackTrace();
     }
     return parse(owner, name, input);
+  }
+
+  /**
+   * Store an Acl in the store
+   *
+   * @param name Name of the Acl
+   * @param acl  Acl to store
+   */
+  public void putAcl(String name, Acl acl) {
+    // Howto store to a resource?
   }
 
   /**

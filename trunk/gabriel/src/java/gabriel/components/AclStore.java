@@ -25,7 +25,7 @@ import gabriel.acl.Acl;
  * AclStore manages Acl lists like creating, removing and persistent storage.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AclStore.java,v 1.1 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: AclStore.java,v 1.2 2004-07-08 08:07:26 stephan Exp $
  */
 public interface AclStore {
   /**
@@ -35,5 +35,13 @@ public interface AclStore {
    * @param name  Name of the Acl
    * @return Requested Acl
    */
+  
   public Acl getAcl(Principal owner, String name);
+  /**
+   * Store an Acl in the store
+   *
+   * @param name Name of the Acl
+   * @param acl Acl to store
+   */
+  public void putAcl(String name, Acl acl);
 }
