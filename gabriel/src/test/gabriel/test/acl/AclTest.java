@@ -26,6 +26,9 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class AclTest extends TestCase {
   private Principal owner;
   private Acl acl;
@@ -47,9 +50,23 @@ public class AclTest extends TestCase {
   public void testSetNameWithWrongOwner() {
     try {
       acl.setName(new Principal("Owner"), "NewTestName");
+///CLOVER:OFF
       fail("Should raise an SecurityException");
+///CLOVER:ON
     } catch (SecurityException e) {
     }
+  }
+
+  public void testSetNewName() {
+    acl.setName(owner, "NewName");
+    assertEquals("New name was set.", "NewName", acl.getName());
+  }
+
+  public void testNotOwner() {
+    Principal principal = new Principal("TestPrincipal");
+    AclEntry entry = new AclEntry(principal);
+    acl.addEntry(owner, entry);
+    assertTrue("Acl isOwner reports correcty owner.", !acl.isOwner(new Principal("NotOwner")));
   }
 
   public void testAddAclEntry() {
@@ -71,7 +88,9 @@ public class AclTest extends TestCase {
     AclEntry entry = new AclEntry(principal);
     try {
       acl.addEntry(new Principal("Owner"), entry);
+///CLOVER:OFF
       fail("Should raise an SecurityException");
+///CLOVER:ON
     } catch (SecurityException e) {
     }
   }
@@ -90,7 +109,9 @@ public class AclTest extends TestCase {
     acl.addEntry(owner, entry);
     try {
       acl.removeEntry(new Principal("Owner"), entry);
+///CLOVER:OFF
       fail("Should raise an SecurityException");
+///CLOVER:ON
     } catch (SecurityException e) {
     }
   }
@@ -105,9 +126,53 @@ public class AclTest extends TestCase {
     Principal newOwner = new Principal("NewOwner");
     try {
       acl.setOwner(new Principal("WrongOwner"), newOwner);
+///CLOVER:OFF
       fail("Should raise an SecurityException");
+///CLOVER:ON
     } catch (SecurityException e) {
     }
+  }
+
+  public void testCheckPermissionWithoutPermission() {
+    Principal principal = new Principal("TestPrincipal");
+    AclEntry entry = new AclEntry(principal);
+    acl.addEntry(owner, entry);
+
+    Principal checkPrincipal = new Principal("TestPrincipal");
+    Permission checkPermission = new Permission("TestPermission");
+    assertEquals("Principal has not permission from entry", 0, acl.checkPermission(checkPrincipal, checkPermission));
+
+  }
+
+
+  public void testWithSetAndNoMatchingEntries() {
+    Permission checkPermission = new Permission("TestPermission");
+    Principal checkPrincipal = new Principal("TestPrincipal");
+    Set principals = new HashSet();
+    principals.add(checkPrincipal);
+
+    assertEquals("Principal has not permission in empty acl", false, acl.checkPermission(principals, checkPermission));
+  }
+
+  public void testWithSetAndOneNegative() {
+    Permission permission = new Permission("TestPermission");
+    Principal principal = new Principal("TestPrincipal");
+
+    AclEntry negative = new AclEntry(principal);
+    negative.addPermission(permission);
+    negative.setNegativePermissions();
+    acl.addEntry(owner, negative);
+
+    AclEntry positive = new AclEntry(principal);
+    positive.addPermission(permission);
+    acl.addEntry(owner, positive);
+
+    Permission checkPermission = new Permission("TestPermission");
+    Principal checkPrincipal = new Principal("TestPrincipal");
+    Set principals = new HashSet();
+    principals.add(checkPrincipal);
+
+    assertEquals("Principal in set makes permissions negative", false, acl.checkPermission(principals, checkPermission));
   }
 
   public void testCheckPermission() {
@@ -138,4 +203,15 @@ public class AclTest extends TestCase {
     Permission checkPermission = new Permission("TestPermission");
     assertEquals("Principal does not have permission because of negative entry", -1, acl.checkPermission(checkPrincipal, checkPermission));
   }
+
+  public void testToString() {
+    Permission permission = new Permission("TestPermission");
+    Principal principal = new Principal("TestPrincipal");
+    AclEntry entry = new AclEntry(principal);
+    entry.addPermission(permission);
+    acl.addEntry(owner, entry);
+
+    assertEquals("Acl serialized to string.", "(TestAcl:[((TestPrincipal): [(TestPermission)])])", acl.toString());
+  }
+
 }

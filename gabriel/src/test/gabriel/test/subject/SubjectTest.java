@@ -44,6 +44,17 @@ public class SubjectTest extends MockObjectTestCase {
     assertNotSame("Subject uses new set for principals", principals, subject.getPrincipals());
   }
 
+  public void testGetName() {
+    Subject subject = new Subject("TestSubject");
+    assertEquals("Subject reports correct name", "TestSubject", subject.getName());
+  }
+
+  public void testEquals() {
+    Subject subject1 = new Subject("TestSubject");
+    Subject subject2 = new Subject("TestSubject");
+    assertTrue("Two subjects are equal", subject1.equals(subject2));
+  }
+
   public void testTheadLocal() {
     Subject subject = new Subject("TestSubject");
 
@@ -53,5 +64,18 @@ public class SubjectTest extends MockObjectTestCase {
     Subject.set(subject);
     Subject other = Subject.get();
     assertSame("Subject static returns same subject", subject, other);
+  }
+
+  public void testHashcode() {
+    Subject s1 = new Subject("TestSubject");
+    Subject s2 = new Subject("TestSubject");
+
+    assertTrue("Hashcode is equal for subjects with same name", s1.hashCode() == s2.hashCode());
+  }
+
+  public void testNullHashcode() {
+    Subject s1 = new Subject(null);
+
+    assertEquals("Hashcode works with null name", 0, s1.hashCode());
   }
 }

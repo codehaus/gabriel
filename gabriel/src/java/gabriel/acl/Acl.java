@@ -30,7 +30,7 @@ import java.util.Set;
  * entries which map principals to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: Acl.java,v 1.2 2004-06-24 07:26:21 stephan Exp $
+ * @version $Id: Acl.java,v 1.3 2004-07-12 12:27:33 stephan Exp $
  */
 
 public class Acl {
@@ -124,12 +124,18 @@ public class Acl {
    */
   public boolean checkPermission(Set principals, Permission permission) {
     boolean hasPermission = false;
+    boolean hasNotPermission = false;
     Iterator iterator = principals.iterator();
     while (iterator.hasNext()) {
       Principal principal = (Principal) iterator.next();
-      hasPermission = hasPermission || (checkPermission(principal, permission) != -1);
+      int value = checkPermission(principal, permission);
+      if (value == 1) {
+        hasPermission = true;
+      } else if (value == -1) {
+        hasNotPermission = true;
+      }
     }
-    return hasPermission;
+    return hasPermission && (hasNotPermission == false);
   }
 
 
@@ -190,5 +196,9 @@ public class Acl {
   public boolean isOwner(Principal owner) {
     if (owner != this.owner) return false;
     return true;
+  }
+
+  public String toString() {
+    return "(" + name + ":" + entries.toString() + ")";
   }
 }

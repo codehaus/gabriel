@@ -18,18 +18,15 @@
 
 package gabriel.test.components.io;
 
-import gabriel.Permission;
-import gabriel.components.io.FileMethodStore;
 import gabriel.components.parser.MethodParser;
 import junit.framework.Test;
 import junit.framework.TestSuite;
-import org.jmock.core.MockObjectSupportTestCase;
+import org.jmock.Mock;
+import org.jmock.MockObjectTestCase;
 
-import java.io.StringReader;
-import java.util.Map;
-import java.util.Set;
+public class FileMethodStoreTest extends MockObjectTestCase {
 
-public class FileMethodStoreTest extends MockObjectSupportTestCase {
+  private Mock mockMethodParser;
 
   public static Test suite() {
     return new TestSuite(FileMethodStoreTest.class);
@@ -37,27 +34,11 @@ public class FileMethodStoreTest extends MockObjectSupportTestCase {
 
   protected void setUp() throws Exception {
     super.setUp();
+    mockMethodParser = mock(MethodParser.class);
   }
 
-  public void testParsePermissionsAndMethods() {
-    FileMethodStore store = new FileMethodStore(new MethodParser());
-    String source = "PM1 { M1 M2 \n" +
-        "                  M3 }" +
-        "            PM2 { M1 }";
-
-    Map methodMap = store.parse(new StringReader(source));
-
-    assertTrue("PM1 contains M1", ((Set) methodMap.get("M1")).contains(new Permission("PM1")));
-    assertTrue("PM1 contains M2", ((Set) methodMap.get("M2")).contains(new Permission("PM1")));
-    assertTrue("PM1 contains M3", ((Set) methodMap.get("M3")).contains(new Permission("PM1")));
-    assertTrue("PM2 contains M1", ((Set) methodMap.get("M1")).contains(new Permission("PM2")));
-  }
-
-  public void testHandleEmptyMethodBlocks() {
-    FileMethodStore store = new FileMethodStore(new MethodParser());
-    String source = "PM1 { } PM2 { M2 }";
-
-    Map methodMap = store.parse(new StringReader(source));
-    assertTrue("PM2 contains M2", ((Set) methodMap.get("M2")).contains(new Permission("PM2")));
-  }
+//  public void testParse() {
+//    FileMethodStore store = new FileMethodStore((MethodParser) mockMethodParser.proxy());
+//    store.parse(new StringReader("PM1 { Class.M1 }"));
+//  }
 }

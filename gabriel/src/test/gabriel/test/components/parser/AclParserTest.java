@@ -68,6 +68,16 @@ public class AclParserTest extends MockObjectSupportTestCase {
 
     assertEquals("PP1 is denied PM1",
         -1, acl.checkPermission(new Principal("PP1"), new Permission("PM1")));
+  }
+
+  public void testNegativePermissionWithSpace() {
+    AclParser parser = new AclParser();
+    String source = "- PP1 { PM1 }";
+
+    Acl acl = parser.parse(owner, name, source);
+
+    assertEquals("PP1 is denied PM1",
+        -1, acl.checkPermission(new Principal("PP1"), new Permission("PM1")));
 
   }
 }

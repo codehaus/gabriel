@@ -17,13 +17,12 @@
  */
 package gabriel.test.acl;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-import junit.framework.TestCase;
-
-import gabriel.acl.AclEntry;
-import gabriel.Principal;
 import gabriel.Permission;
+import gabriel.Principal;
+import gabriel.acl.AclEntry;
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
 
 public class AclEntryTest extends TestCase {
   private AclEntry entry;
@@ -59,13 +58,13 @@ public class AclEntryTest extends TestCase {
 
   public void testAddPermission() {
     entry.addPermission(permission);
-    assertTrue("Entry contains added permission.",  entry.permissions().contains(permission));
+    assertTrue("Entry contains added permission.", entry.permissions().contains(permission));
   }
 
   public void testRemovePermission() {
     entry.addPermission(permission);
-    assertTrue("Entry returns true on remove.",  entry.removePermission(permission));
-    assertTrue("Entry does not contain removed permission.", ! entry.permissions().contains(permission));
+    assertTrue("Entry returns true on remove.", entry.removePermission(permission));
+    assertTrue("Entry does not contain removed permission.", !entry.permissions().contains(permission));
   }
 
   public void testPermissionOnlyAddedOnce() {
@@ -79,4 +78,16 @@ public class AclEntryTest extends TestCase {
     entry.addPermission(permission);
     assertTrue("Entry has permission.", entry.checkPermission(permission));
   }
+
+  public void testToString() {
+    entry.addPermission(permission);
+    assertEquals("Entry serialized to string.", "((TestPrincipal): [(TestPermission)])", entry.toString());
+  }
+
+  public void testToStringWithNegative() {
+    entry.addPermission(permission);
+    entry.setNegativePermissions();
+    assertEquals("Entry serialized to string.", "-((TestPrincipal): [(TestPermission)])", entry.toString());
+  }
+
 }

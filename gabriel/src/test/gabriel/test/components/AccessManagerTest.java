@@ -24,17 +24,21 @@ import gabriel.acl.Acl;
 import gabriel.components.AccessManager;
 import gabriel.components.AccessManagerImpl;
 import gabriel.components.AclStore;
-import gabriel.components.parser.AclParser;
 import gabriel.components.io.FileAclStore;
+import gabriel.components.parser.AclParser;
 import junit.framework.Test;
 import junit.framework.TestSuite;
+import org.jmock.Mock;
 import org.jmock.MockObjectTestCase;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class AccessManagerTest extends MockObjectTestCase {
   private AccessManager accessManager;
+  private Mock mockAclStore;
 
   public static Test suite() {
     return new TestSuite(AccessManagerTest.class);
@@ -42,11 +46,14 @@ public class AccessManagerTest extends MockObjectTestCase {
 
   protected void setUp() throws Exception {
     super.setUp();
+    mockAclStore = mock(AclStore.class);
+
     accessManager = new AccessManagerImpl(new FileAclStore(new AclParser()) {
       public Acl getAcl(Principal owner, String name) {
         return new Acl(owner, name);
       }
     });
+    accessManager.start();
   }
 
   public void testCheckPermission() {
@@ -57,5 +64,24 @@ public class AccessManagerTest extends MockObjectTestCase {
     principals.add(principal);
     assertTrue("TestPrincipal has TestPermission.",
         accessManager.checkPermission(principals, permission));
+  }
+
+  public void testAddPermissionsWithList() {
+    Principal principal = new Principal("TestPrincipal");
+    Permission permission = new Permission("TestPermission");
+    List permissions = new ArrayList();
+    permissions.add(permission);
+    accessManager.addPermission(principal, permissions);
+    Set principals = new HashSet();
+    principals.add(principal);
+    assertTrue("TestPrincipal has TestPermission.",
+        accessManager.checkPermission(principals, permission));
+  }
+
+  public void testStopStoresMap() {
+    mockAclStore.expects(once()).method("putAcl");
+    mockAclStore.expects(once()).method("getAcl");
+    accessManager = new AccessManagerImpl((AclStore) mockAclStore.proxy());
+    accessManager.stop();
   }
 }

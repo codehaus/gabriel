@@ -30,7 +30,7 @@ import java.util.Set;
  * in a certain context.
  *
  * @author Stephan J. Schmidt
- * @version $Id: ContextAccessManagerImpl.java,v 1.3 2004-06-24 10:22:44 stephan Exp $
+ * @version $Id: ContextAccessManagerImpl.java,v 1.4 2004-07-12 12:27:33 stephan Exp $
  */
 
 public class ContextAccessManagerImpl implements ContextAccessManager {
@@ -41,6 +41,12 @@ public class ContextAccessManagerImpl implements ContextAccessManager {
    */
   public ContextAccessManagerImpl(AccessManager accessManager) {
     this.accessManager = accessManager;
+  }
+
+  public void start() {
+  }
+
+  public void stop() {
   }
 
   /**

@@ -16,19 +16,32 @@
  *  limitations under the License.
  */
 
-package gabriel.test.components.context;
+package gabriel.test.subject;
 
+import gabriel.Principal;
 import junit.framework.Test;
-import junit.framework.TestCase;
 import junit.framework.TestSuite;
+import org.jmock.MockObjectTestCase;
 
+/**
+ * @author stephan
+ * @version $id$
+ */
 
-public class AllContextTests extends TestCase {
+public class PrincipalTest extends MockObjectTestCase {
+
   public static Test suite() {
-    TestSuite s = new TestSuite();
-    s.addTest(OwnerAccessContextTest.suite());
-    s.addTest(ContextAccessMangerTest.suite());
-    s.addTest(ContextMethodAccessManagerTest.suite());
-    return s;
+    return new TestSuite(PrincipalTest.class);
   }
+
+  public void testGetName() {
+    Principal principal = new Principal("TestPrincipal");
+    assertEquals("Principal reports correct name.", "TestPrincipal", principal.getName());
+  }
+
+  public void testNotEquals() {
+    Principal principal = new Principal("TestPrincipal");
+    assertFalse("Principal not equal to other type.", principal.equals("StringWrong"));
+  }
+
 }

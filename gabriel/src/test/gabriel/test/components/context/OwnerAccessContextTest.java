@@ -51,10 +51,22 @@ public class OwnerAccessContextTest extends MockObjectTestCase {
         !principals.contains(new Principal("Owner")));
   }
 
+  public void testDoNotModifyIfAlreadyOwner() {
+    Mock ownable = mock(Ownable.class);
+
+    AccessContext context = new OwnerAccessContext((Ownable) ownable.proxy());
+    Set principals = new HashSet();
+    principals.add(new Principal("TestOwner"));
+    principals.add(new Principal("Owner"));
+
+    context.modifyPrincipals(principals);
+    assertTrue("Owner principal was not added to list.",
+        principals.size() == 2);
+  }
+
   public void testModifyPrincipalsIfOwner() {
     Mock ownable = mock(Ownable.class);
     ownable.expects(once()).method("getOwner").will(returnValue(new Principal("TestOwner")));
-
 
     AccessContext context = new OwnerAccessContext((Ownable) ownable.proxy());
     Set principals = new HashSet();
