@@ -83,14 +83,17 @@ public class FileAclStore implements AclStore {
   }
 
   private Acl parse(Principal owner, String name, String input) {
-    boolean principalIsNext = true;
-    boolean permissionsAreNext = false;
     boolean negative = false;
 
     Principal principal = null;
     List permissions = new ArrayList();
 
     Acl acl = new Acl(owner, name);
+
+    int PERMISSIONS = 1;
+    int PRINCIPAL = 2;
+
+    int state = PRINCIPAL;
 
     for (StringTokenizer stringTokenizer = new StringTokenizer(input, " \n{}", true);
          stringTokenizer.hasMoreTokens();) {
@@ -100,11 +103,9 @@ public class FileAclStore implements AclStore {
       if (" ".equals(t) || "\n".equals(t)) {
         // do nothing
       } else if ("{".equals(t)) {
-        permissionsAreNext = true;
-        principalIsNext = false;
-      } else if ("}".equals(t)) {
-        permissionsAreNext = false;
-        principalIsNext = true;
+        state = PERMISSIONS;
+         } else if ("}".equals(t)) {
+        state = PRINCIPAL;
 
         AclEntry entry = new AclEntry(principal);
         Iterator iterator = permissions.iterator();
@@ -119,7 +120,7 @@ public class FileAclStore implements AclStore {
         acl.addEntry(owner, entry);
         permissions = new ArrayList();
         principal = null;
-      } else if (principalIsNext) {
+      } else if (state == PRINCIPAL) {
         if (t.startsWith("-")) {
           negative = true;
           t = t.substring(1);
@@ -128,7 +129,7 @@ public class FileAclStore implements AclStore {
         if (!"".equals(t)) {
           principal = new Principal(t);
         }
-      } else if (permissionsAreNext) {
+      } else if (state == PERMISSIONS) {
         permissions.add(new Permission(t));
       }
     }

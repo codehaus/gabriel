@@ -52,4 +52,11 @@ public class FileMethodStoreTest extends MockObjectSupportTestCase {
     assertTrue("PM2 contains M1", ((Set) methodMap.get("M1")).contains(new Permission("PM2")));
   }
 
+  public void testHandleEmptyMethodBlocks() {
+    FileMethodStore store = new FileMethodStore();
+    String source = "PM1 { } PM2 { M2 }";
+
+    Map methodMap = store.parse(new StringReader(source));
+    assertTrue("PM2 contains M2", ((Set) methodMap.get("M2")).contains(new Permission("PM2")));
+ }
 }
