@@ -2,7 +2,7 @@
 
 <!--
   ** @author Stephan J. Schmidt
-  ** @version $Id: build.xml,v 1.6 2004-06-29 13:00:05 stephan Exp $
+  ** @version $Id: build.xml,v 1.7 2005-05-11 12:50:10 stephan Exp $
   -->
 <project basedir="." default="compile" name="Gabriel">
 
@@ -10,13 +10,16 @@
 
   <path id="test.classpath">
     <pathelement location="${lib}/junit-3.8.1.jar"/>
+    <pathelement location="${lib}/junit-addons-1.4.jar"/>
     <pathelement location="${lib}/jmock-1.0.0.jar"/>
     <pathelement location="${lib}/dynaop-1.0-beta.jar"/>
     <pathelement location="${lib}/cglib-asm-1.0.jar"/>
+    <pathelement location="${lib}/clover.jar"/>
     <pathelement location="${lib}/picocontainer-1.0.jar"/>
     <pathelement location="${lib}/nanocontainer-dynaop-1.0-beta-1-SNAPSHOT.jar"/>
     <!-- <pathelement location="${lib}/jakarta-oro-2.0.7.jar"/> -->
     <!-- <pathelement location="${lib}/bsh-2.0b1.jar"/> -->
+    <pathelement location="${src}/test/gabriel/test/components/io"/>
   </path>
 
   <path id="classpath">
@@ -74,7 +77,6 @@
   <target name="jar" depends="compile, compile-test" description="build ${appname}.jar">
     <jar destfile="${jar}/${appname}.jar" excludes="**/CVS"
       manifest="${conf}/META-INF/manifest.${appname}">
-      <fileset dir="." includes="*.acl"/>
       <fileset dir="${out}/" includes="**"/>
       <fileset dir="${out}/" includes="**"/>
       <fileset dir="${src}" includes="META-INF/**"/>
@@ -130,4 +132,26 @@
       <!--    <link href="http://developer.java.sun.com/developer/products/xml/docs/api/"/> -->
     </javadoc>
   </target>
+
+
+  <!-- CLOVER -->
+
+  <taskdef resource="clovertasks"/>
+
+  <target name="with.clover">
+     <clover-setup initString="clover_coverage.db/"/>
+  </target>
+
+  <target name="clover.log" depends="with.clover">
+  </target>
+
+  <target name="report" depends="with.clover">
+   <clover-report>
+      <current outfile="clover_html" title="clover Gabriel">
+         <format type="html"/>
+      </current>
+   </clover-report>
+  </target>
+
 </project>
+

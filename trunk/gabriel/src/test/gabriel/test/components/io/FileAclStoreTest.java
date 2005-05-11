@@ -19,9 +19,11 @@
 package gabriel.test.components.io;
 
 import gabriel.Principal;
+import gabriel.Permission;
 import gabriel.acl.Acl;
 import gabriel.components.io.FileAclStore;
 import gabriel.components.parser.AclParser;
+import gabriel.components.parser.AclParserImpl;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 import org.jmock.Mock;
@@ -49,4 +51,10 @@ public class FileAclStoreTest extends MockObjectTestCase {
     assertEquals("Returns correct method map", acl, store.parse(new Principal("Owner"), "TestAcl", new StringReader("P1 {\n PM1 \n }")));
   }
 
+  public void testGetAcl() {
+    FileAclStore store = new FileAclStore(new AclParserImpl());
+    Acl acl = store.getAcl(new Principal("Owner"), "test_access");
+    assertEquals("Acl contains Principal P1 with Permission PM1", 1, acl.checkPermission(new Principal("P1"), new Permission("PM1")));
+    assertEquals("Acl contains Principal P1 with Permission PM2", 1, acl.checkPermission(new Principal("P1"), new Permission("PM2")));
+   }
 }
