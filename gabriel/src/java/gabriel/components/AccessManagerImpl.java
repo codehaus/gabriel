@@ -34,7 +34,7 @@ import java.util.Set;
  * to permissions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: AccessManagerImpl.java,v 1.5 2005-05-11 12:50:11 stephan Exp $
+ * @version $Id: AccessManagerImpl.java,v 1.6 2005-05-11 14:53:39 stephan Exp $
  */
 public class AccessManagerImpl implements AccessManager {
   private Acl acl;
@@ -111,7 +111,7 @@ public class AccessManagerImpl implements AccessManager {
    */
   public void addNegativePermission(Principal principal, List permissions) {
     AclEntry entry = new AclEntry(principal);
-    entry.setNegative(true);
+    entry.setNegativePermissions();
 
     Iterator iterator = permissions.iterator();
     while (iterator.hasNext()) {

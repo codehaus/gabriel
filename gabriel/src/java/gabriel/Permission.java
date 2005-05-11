@@ -22,7 +22,7 @@ package gabriel;
  * Permission grants access to the execution of actions.
  *
  * @author Stephan J. Schmidt
- * @version $Id: Permission.java,v 1.3 2004-07-12 12:27:33 stephan Exp $
+ * @version $Id: Permission.java,v 1.4 2005-05-11 14:53:39 stephan Exp $
  */
 
 public class Permission {
@@ -50,6 +50,10 @@ public class Permission {
    */
   public boolean implies(Permission other) {
     return this.equals(other);
+  }
+
+  public String getName() {
+	  return name;
   }
 
   /**
