@@ -29,7 +29,15 @@ import junit.framework.TestSuite;
 
 public class AllTests extends TestCase {
 
-  public static Test suite() {
+  public static Test suite() throws Exception {
+//    DirectorySuiteBuilder builder = new DirectorySuiteBuilder();
+//    builder.setFilter(new SimpleTestFilter() {
+//        public boolean include(Class clazz) {
+//            return super.include(clazz);
+//        }
+//    });
+//    System.err.println(new File(".").getAbsolutePath());
+//    return builder.suite("src/test/");
     TestSuite s = new TestSuite();
     s.addTest(AllAclTests.suite());
     s.addTest(AllDynaopTests.suite());
@@ -38,5 +46,7 @@ public class AllTests extends TestCase {
     s.addTest(PrincipalTest.suite());
     s.addTest(PermissionTest.suite());
     return s;
+
   }
+
 }

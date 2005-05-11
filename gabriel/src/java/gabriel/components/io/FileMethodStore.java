@@ -61,12 +61,20 @@ public class FileMethodStore implements MethodStore {
    * @return Method map
    */
   public Map getMap(String name) {
+    Reader reader = null;
     try {
-      Reader reader = new InputStreamReader(FileMethodStore.class.getResourceAsStream(getName(name)));
+      reader = new InputStreamReader(FileMethodStore.class.getResourceAsStream(getName(name)));
       return parse(reader);
     } catch (Exception e) {
       e.printStackTrace();
+    } finally {
+      try {
+        if (null != reader) reader.close();
+      } catch (IOException e) {
+        // Ignore
+      }
     }
+
     return null;
   }
 
